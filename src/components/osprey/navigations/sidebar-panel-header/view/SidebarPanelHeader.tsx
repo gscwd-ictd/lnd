@@ -1,9 +1,5 @@
 import { FunctionComponent } from "react";
-
-export type SidebarPanelHeaderProps = {
-  title: string;
-  subtitle: string;
-};
+import { SidebarPanelHeaderProps } from "../utils/props";
 
 export const SidebarPanelHeader: FunctionComponent<SidebarPanelHeaderProps> = ({ title, subtitle }) => {
   return (
