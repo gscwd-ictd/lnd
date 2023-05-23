@@ -49,7 +49,7 @@ export const DataTable = <T extends unknown>({
 
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
 
-  const [{ pageIndex, pageSize }, setPagination] = useState<PaginationState>({ pageIndex: 0, pageSize: 10 });
+  //const [{ pageIndex, pageSize }, setPagination] = useState<PaginationState>({ pageIndex: 0, pageSize: 10 });
 
   const tblCols = useMemo(() => columns, [columns]);
 
@@ -148,7 +148,7 @@ export const DataTable = <T extends unknown>({
         )}
       </table>
 
-      <footer className="border-t pl-2 py-2 w-full">
+      <footer className="border-t pl-2 py-1 w-full">
         <DataTablePagination<T> table={table} />
       </footer>
     </div>
