@@ -1,5 +1,5 @@
 import { Table } from "@tanstack/react-table";
-import { forwardRef, useCallback, useState } from "react";
+import { forwardRef, useCallback, useEffect, useState } from "react";
 
 type DataTableGlobalSearchProps = {
   wait?: number;
@@ -9,7 +9,6 @@ type DataTableGlobalSearchProps = {
 export const DataTableGlobalSearch = forwardRef<HTMLInputElement, DataTableGlobalSearchProps>(
   ({ wait = 500, table, ...restProps }, forwardedRef) => {
     const [isSearching, setIsSearching] = useState(false);
-    const [searchVal, setSearchVal] = useState("");
 
     const onSearch = (value: string) => table.setGlobalFilter(value);
 
@@ -37,6 +36,7 @@ export const DataTableGlobalSearch = forwardRef<HTMLInputElement, DataTableGloba
         <input
           {...restProps}
           ref={forwardedRef}
+          disabled={table.getCoreRowModel().rows.length === 0}
           type="text"
           className="py-3 px-4 pl-11 block w-full border-transparent bg-gray-50 rounded-md text-sm focus:z-10 focus:border-indigo-500 focus:ring-indigo-500"
           placeholder="Search..."
