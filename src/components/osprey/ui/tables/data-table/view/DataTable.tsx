@@ -6,7 +6,9 @@ import {
   GroupingState,
   PaginationState,
   Row,
+  RowSelectionState,
   SortingState,
+  Table,
   VisibilityState,
   flexRender,
   getCoreRowModel,
@@ -17,12 +19,14 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ReactElement, useEffect, useMemo, useState } from "react";
+import { ReactElement, ReactNode, createContext, useEffect, useMemo, useState } from "react";
 import { DataTableColumnHeader } from "../../data-table-column-header/view/DataTableColumnHeader";
 import { DataTableHeader } from "../../data-table-header/view/DataTableHeader";
 import { DataTablePagination } from "../../data-table-pagination/view/DataTablePagination";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { DataTableColumnSort } from "../../data-table-column-sort/view/DataTableColumnSort";
+import { create } from "zustand";
+import { AnimatePresence, motion } from "framer-motion";
 
 export type DataTableProps<T extends unknown> = {
   data: Array<T>;
@@ -30,7 +34,14 @@ export type DataTableProps<T extends unknown> = {
   onRowClick?: (row: Row<T>) => void;
   title?: string;
   subtitle?: string;
+  children?: ReactNode;
 };
+
+type DataTableContextState<T> = {
+  table: Table<T>;
+};
+
+export const DataTableContext = createContext({} as DataTableContextState<any>);
 
 export const DataTable = <T extends unknown>({
   data,
@@ -38,6 +49,7 @@ export const DataTable = <T extends unknown>({
   onRowClick,
   title,
   subtitle,
+  children,
 }: DataTableProps<T>): ReactElement => {
   const [sorting, setSorting] = useState<SortingState>([]);
 
@@ -49,7 +61,7 @@ export const DataTable = <T extends unknown>({
 
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
 
-  //const [{ pageIndex, pageSize }, setPagination] = useState<PaginationState>({ pageIndex: 0, pageSize: 10 });
+  const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
 
   const tblCols = useMemo(() => columns, [columns]);
 
@@ -58,7 +70,8 @@ export const DataTable = <T extends unknown>({
   const table = useReactTable({
     data: tblData,
     columns: tblCols,
-    state: { sorting, globalFilter, columnFilters, columnVisibility, grouping },
+    state: { sorting, globalFilter, columnFilters, columnVisibility, grouping, rowSelection },
+    enableRowSelection: true,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -70,13 +83,27 @@ export const DataTable = <T extends unknown>({
     onGroupingChange: setGroup,
     onColumnFiltersChange: setColumnFilters,
     onGlobalFilterChange: setGlobalFilter,
+    onRowSelectionChange: setRowSelection,
   });
 
-  useEffect(() => console.log(tblData), [tblData]);
-
   return (
-    <div className="border rounded overflow-clip overflow-x-auto shadow-md shadow-gray-50">
+    <div className="relative border rounded overflow-clip overflow-x-auto shadow-md shadow-gray-50">
       <DataTableHeader<T> title={title} subtitle={subtitle} table={table} />
+
+      <DataTableContext.Provider value={{ table } as DataTableContextState<T>}>
+        <AnimatePresence>
+          {table.getSelectedRowModel().rows.length > 0 ? (
+            <motion.div
+              initial={{ y: -50, opacity: 0 }}
+              animate={{ y: 1, opacity: 1 }}
+              exit={{ y: -50, opacity: 0 }}
+              className="absolute top-0 flex w-full justify-center items-center h-12"
+            >
+              {children}
+            </motion.div>
+          ) : null}
+        </AnimatePresence>
+      </DataTableContext.Provider>
 
       <table className="flex-1 w-full text-left whitespace-no-wrap bg-white table-auto">
         {/**
