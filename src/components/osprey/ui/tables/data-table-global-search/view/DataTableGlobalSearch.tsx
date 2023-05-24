@@ -90,7 +90,7 @@ export const DataTableGlobalSearch = forwardRef<HTMLInputElement, DataTableGloba
           </div>
           <button
             type="button"
-            className="py-3 px-4 inline-flex flex-shrink-0 justify-center items-center rounded-r-md border border-transparent font-semibold bg-indigo-500 text-white hover:bg-indigo-600 focus:z-10 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all text-sm"
+            className="z-[100] py-3 px-4 inline-flex flex-shrink-0 justify-center items-center rounded-r-md border border-transparent font-semibold bg-indigo-500 text-white hover:bg-indigo-600 focus:z-10 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all text-sm"
             disabled={table.getCoreRowModel().rows.length === 0}
             onClick={() => {
               table.resetColumnFilters();
