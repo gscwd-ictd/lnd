@@ -413,7 +413,7 @@ const DataTableWithSlider = () => {
   );
 };
 
-export const WithSlider: Story = {
+export const WithSlideOver: Story = {
   render: () => {
     return <DataTableWithSlider />;
   },
