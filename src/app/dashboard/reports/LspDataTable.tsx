@@ -7,6 +7,7 @@ import { DataTable } from "@lms/components/osprey/ui/tables/data-table/view/Data
 import { SlideOver } from "@lms/components/osprey/ui/overlays/slider-over/view/SliderOver";
 import { Avatar } from "@lms/components/osprey/ui/avatar/view/Avatar";
 import { Button } from "@lms/components/osprey/ui/button/view/Button";
+import { DataTableDefaultSelectionToolbar } from "@lms/components/osprey/ui/tables/data-table-default-selection-toolbar/view/DataTableDefaultSelectionToolbar";
 
 type LspDataTableProps = {
   data: Person[];
@@ -154,9 +155,11 @@ export const LspDataTable: FunctionComponent<LspDataTableProps> = ({ data }) => 
         subtitle="Lorem ipsum dolor sit amet consectetur adipisicing elit."
         onRowClick={(row) => {
           setPerson(row.original);
-          setOpen(true);
+          // setOpen(true);
         }}
-      />
+      >
+        <DataTableDefaultSelectionToolbar />
+      </DataTable>
     </>
   );
 };
