@@ -496,6 +496,9 @@ export const WithSlideOver: Story = {
  * This data table component showcases how the table handles row selection with `Checkbox` component.
  * Please note that with row selection enabled, it is not recommended to use `onRowClick()` since both features collide in functionality.
  * If row selection is a must, use it in conjunction with action buttons instead.
+ *
+ * You can create your own row selection toolbar by wrapping it with the `<DataTable />` component. Then use the `DataTableContext` to
+ * access the current table instance.
  */
 export const WithRowSelection: Story = {
   args: {
@@ -508,7 +511,7 @@ export const WithRowSelection: Story = {
 };
 
 /**
- * This data table component showcases how the table looks like and shoulld behave if there are no data to display.
+ * This data table component showcases how the table looks like and should behave if there are no data to display.
  *
  * - All sortable columns will automatically be disabled.
  * - All filterable columns will automatically be disabled.
