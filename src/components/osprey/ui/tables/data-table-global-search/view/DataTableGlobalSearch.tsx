@@ -1,5 +1,5 @@
 import { Table } from "@tanstack/react-table";
-import { forwardRef, useCallback, useEffect, useState } from "react";
+import { forwardRef, useCallback, useState } from "react";
 
 type DataTableGlobalSearchProps = {
   wait?: number;
@@ -34,18 +34,15 @@ export const DataTableGlobalSearch = forwardRef<HTMLInputElement, DataTableGloba
     const debounceFn = useCallback(debounce(onSearch), []);
 
     return (
-      <div>
-        <label htmlFor="hs-trailing-button-add-on-with-icon-and-button" className="sr-only">
-          Label
-        </label>
-        <div className="relative flex rounded-md">
+      <div className="bg-green-100">
+        <div className="relative flex rounded-md z-[100]">
           <input
             {...restProps}
             ref={forwardedRef}
             disabled={table.getCoreRowModel().rows.length === 0}
             type="text"
             value={searchVal}
-            className="py-3 px-4 z-50 pl-11 block w-full border-transparent bg-gray-50 rounded-l-md text-sm focus:z-10 focus:border-indigo-500 focus:ring-indigo-500"
+            className="py-3 px-4 pl-11 block w-full border-transparent bg-gray-50 rounded-l-md text-sm focus:z-10 focus:border-indigo-500 focus:ring-indigo-500"
             placeholder="Search..."
             onChange={(e) => {
               debounceFn(e.target.value);
@@ -90,7 +87,7 @@ export const DataTableGlobalSearch = forwardRef<HTMLInputElement, DataTableGloba
           </div>
           <button
             type="button"
-            className="z-[100] py-3 px-4 inline-flex flex-shrink-0 justify-center items-center rounded-r-md border border-transparent font-semibold bg-indigo-500 text-white hover:bg-indigo-600 focus:z-10 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all text-sm"
+            className="py-3 px-4 inline-flex flex-shrink-0 justify-center items-center rounded-r-md border border-transparent font-semibold bg-indigo-500 text-white hover:bg-indigo-600 focus:z-10 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all text-sm"
             disabled={table.getCoreRowModel().rows.length === 0}
             onClick={() => {
               table.resetColumnFilters();

@@ -97,7 +97,7 @@ export const DataTable = <T extends unknown>({
               initial={{ y: -50, opacity: 0 }}
               animate={{ y: 1, opacity: 1 }}
               exit={{ y: -50, opacity: 0 }}
-              className="absolute top-0 flex w-full justify-center items-center h-12"
+              className="absolute top-0 flex w-full justify-center items-center"
             >
               {children}
             </motion.div>
