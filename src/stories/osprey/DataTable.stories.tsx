@@ -3,6 +3,8 @@ import { DataTable } from "../../components/osprey/ui/tables/data-table/view/Dat
 import { Avatar } from "../../components/osprey/ui/avatar/view/Avatar";
 import { SlideOver } from "../../components/osprey/ui/overlays/slider-over/view/SliderOver";
 import { Button } from "../../components/osprey/ui/button/view/Button";
+import { Checkbox } from "../../components/osprey/ui/checkbox/view/Checkbox";
+import { DataTableDefaultSelectionToolbar } from "../../components/osprey/ui/tables/data-table-default-selection-toolbar/view/DataTableDefaultSelectionToolbar";
 import { createColumnHelper } from "@tanstack/react-table";
 import React, { useState } from "react";
 
@@ -237,6 +239,63 @@ const personColumnsWithActionButtons = [
   }),
 ];
 
+const personColumnsWithCheckbox = [
+  personHelper.accessor("photoUrl", {
+    header: ({ table }) => (
+      <div className="pl-2">
+        <Checkbox
+          {...{
+            checked: table.getIsAllRowsSelected(),
+            onChange: table.getToggleAllRowsSelectedHandler(),
+          }}
+        />
+      </div>
+    ),
+
+    cell: ({ row }) => (
+      <Checkbox
+        {...{
+          checked: row.getIsSelected(),
+          disabled: !row.getCanSelect(),
+          onChange: row.getToggleSelectedHandler(),
+        }}
+      />
+    ),
+    enableColumnFilter: false,
+    enableSorting: false,
+  }),
+
+  personHelper.accessor("name", {
+    header: "Name",
+    cell: (info) => info.getValue(),
+    // cell: (info) => (
+    //   <div className="flex items-center gap-2">
+    //     <Avatar size="sm" source={info.row.original.photoUrl} alt="avtr" />
+    //     <div>
+    //       <span className="text-gray-700">{info.getValue()}</span>
+    //       <p className="font-mono text-xs text-gray-400">{info.row.original.email}</p>
+    //     </div>
+    //   </div>
+    // ),
+  }),
+
+  personHelper.accessor("company", {
+    header: "Company",
+    cell: (info) => info.getValue(),
+  }),
+
+  personHelper.accessor("address", {
+    header: "Address",
+    cell: (info) => info.getValue(),
+    // enableSorting: false,
+  }),
+
+  personHelper.accessor("country", {
+    header: "Country",
+    cell: (info) => info.getValue(),
+  }),
+];
+
 /**
  * This data table component showcases the possibility of adding custom component as a row item.
  * In this case, a custom Avatar component, with name and email address under it.
@@ -430,6 +489,16 @@ const DataTableWithSlider = () => {
 export const WithSlideOver: Story = {
   render: () => {
     return <DataTableWithSlider />;
+  },
+};
+
+export const WithRowSelection: Story = {
+  args: {
+    data: personArray,
+    columns: personColumnsWithCheckbox,
+    title: "DataTable",
+    subtitle: "A data table component with row selection enabled.",
+    children: <DataTableDefaultSelectionToolbar />,
   },
 };
 
