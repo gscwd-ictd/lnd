@@ -237,6 +237,10 @@ const personColumnsWithActionButtons = [
   }),
 ];
 
+/**
+ * This data table component showcases the possibility of adding custom component as a row item.
+ * In this case, a custom Avatar component, with name and email address under it.
+ */
 export const WithAvatar: Story = {
   args: {
     title: "DataTable",
@@ -246,6 +250,9 @@ export const WithAvatar: Story = {
   },
 };
 
+/**
+ * This data table component is the bare component with pure textual data.
+ */
 export const WithoutAvatar: Story = {
   args: {
     title: "DataTable",
@@ -255,6 +262,9 @@ export const WithoutAvatar: Story = {
   },
 };
 
+/**
+ * This data table showcases a custom component with action buttons as part of a row item.
+ */
 export const WithActionButtons: Story = {
   args: {
     title: "DataTable",
@@ -413,8 +423,28 @@ const DataTableWithSlider = () => {
   );
 };
 
+/**
+ * This data table component showcases the `onRowClick` event, which fires everytime a certain row in the table has been clicked.
+ * In this case, a `SlideOver` component will appear for each item that has been clicked.
+ */
 export const WithSlideOver: Story = {
   render: () => {
     return <DataTableWithSlider />;
+  },
+};
+
+/**
+ * This data table component showcases how the table looks like and shoulld behave if there are no data to display.
+ *
+ * - All sortable columns will automatically be disabled.
+ * - All filterable columns will automatically be disabled.
+ * - The global search input will automatically be disabled.
+ */
+export const WithEmptyData: Story = {
+  args: {
+    data: [],
+    columns: personColumnsWithAvatar,
+    title: "DataTable",
+    subtitle: "A data table component with empty data",
   },
 };
