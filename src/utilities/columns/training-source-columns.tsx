@@ -4,6 +4,7 @@ import { Avatar } from "@lms/components/osprey/ui/avatar/view/Avatar";
 import { createColumnHelper } from "@tanstack/react-table";
 import { faker } from "@faker-js/faker";
 import { Person } from "@lms/app/dashboard/reports/page";
+import { Checkbox } from "@lms/components/osprey/ui/checkbox/view/Checkbox";
 
 type Pagination<T> = {
   items: T[];
@@ -66,6 +67,31 @@ export const trainingSourceColumns = [
 const personHelper = createColumnHelper<Person>();
 
 export const personColumns = [
+  personHelper.accessor("photoUrl", {
+    header: ({ table }) => (
+      <div className="pl-2">
+        <Checkbox
+          {...{
+            checked: table.getIsAllRowsSelected(),
+            onChange: table.getToggleAllRowsSelectedHandler(),
+          }}
+        />
+      </div>
+    ),
+
+    cell: ({ row }) => (
+      <Checkbox
+        {...{
+          checked: row.getIsSelected(),
+          disabled: !row.getCanSelect(),
+          onChange: row.getToggleSelectedHandler(),
+        }}
+      />
+    ),
+    enableColumnFilter: false,
+    enableSorting: false,
+  }),
+
   personHelper.accessor("name", {
     header: "Name",
     cell: (info) => info.getValue(),
