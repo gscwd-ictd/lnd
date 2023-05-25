@@ -1,18 +1,29 @@
-import { FunctionComponent, ReactNode } from "react";
+import { ComponentPropsWithoutRef, ElementRef, FunctionComponent, ReactNode, forwardRef, HTMLAttributes } from "react";
+import { Button } from "../../button/view/Button";
+import { styles } from "../utils/styles";
+import { CardHeaderProps, CardProps } from "../utils/props";
 
-type CardProps = {
-  title?: ReactNode | ReactNode[];
-  children?: ReactNode | ReactNode[];
+export const Card: FunctionComponent<CardProps> = ({ variant = "default", className, children }) => {
+  return <div className={styles.card({ variant, className })}>{children}</div>;
 };
 
-export const Card: FunctionComponent<CardProps> = ({ children }) => {
+export const CardHeader: FunctionComponent<CardHeaderProps> = ({ startIcon, title, subtitle, action }) => {
   return (
-    <div className="p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100">
-      <h5 className="text-2xl font-bold tracking-tight">Header</h5>
-      <h6 className="mb-2">Subheader</h6>
-      <p className="text-gray-700 ">{children}</p>
+    <div className="flex items-center px-5 pt-5 mb-3">
+      {startIcon ? <div className="mr-2">{startIcon}</div> : null}
+      <div>
+        <h3 className="text-gray-700 text-lg font-medium">{title}</h3>
+        <p className="text-gray-500 text-sm">{subtitle}</p>
+      </div>
+      {action ? <div className="ml-auto">{action}</div> : null}
     </div>
   );
 };
 
-Card.displayName = "Card";
+export const CardContent: FunctionComponent<CardProps & HTMLAttributes<HTMLDivElement>> = ({ className, children }) => {
+  return <div className={styles.cardcontent({ className })}>{children}</div>;
+};
+
+export const CardActions: FunctionComponent<CardProps & HTMLAttributes<HTMLDivElement>> = ({ className, children }) => {
+  return <div className={styles.cardactions({ className })}>{children}</div>;
+};
