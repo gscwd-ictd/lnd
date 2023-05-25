@@ -62,7 +62,8 @@ import Image from "next/image";
 import TestPic from "../../../lib/img/test.jpg";
 // import * as Tabs from "@radix-ui/react-tabs";
 import { Toast, ToastProvider, ToastViewport } from "@lms/components/osprey/ui/overlays/toast/view/Toast";
-import { Alert } from "@lms/components/osprey/ui/overlays/alert/view/Alert";
+import { Alert } from "@lms/components/osprey/ui/overlays/alert/view/alert";
+import { Card, CardActions, CardContent, CardHeader } from "@lms/components/osprey/ui/card/view/Card";
 
 export default function TrainingTypeModal() {
   // const [open, setOpen] = useState(false);
@@ -135,18 +136,63 @@ export default function TrainingTypeModal() {
 
       <div className="mt-5 px-3">
         <div className="flex flex-row gap-4">
-          {/* <Card></Card> */}
+          <Card variant="outlined">
+            <CardHeader
+              title="Learning Service Providers"
+              subtitle="Subtitle"
+              action={
+                <Button>
+                  <svg
+                    aria-hidden="true"
+                    className="w-4 h-4"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                      clipRule="evenodd"
+                    ></path>
+                  </svg>
+                </Button>
+              }
+            />
+            <CardContent>
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis, nostrum voluptatum quo repudiandae
+              adipisci laboriosam exercitationem earum aliquam a modi dolores asperiores. Hic, veritatis! Praesentium
+              fuga consectetur iure eligendi nam.
+            </CardContent>
+            <CardActions>
+              <Button size="small">
+                Read more
+                <svg
+                  aria-hidden="true"
+                  className="w-4 h-4 ml-2 -mr-1"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                    clipRule="evenodd"
+                  ></path>
+                </svg>
+              </Button>
+            </CardActions>
+          </Card>
           {/* Card (default) */}
-          <div className="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100">
+          {/* <div className="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100">
             <h5 className="text-2xl font-bold tracking-tight">Header</h5>
             <h6 className="mb-2">Subheader</h6>
             <p className="text-gray-700 ">
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim sed in, reprehenderit ipsam odio temporibus
               eaque, non soluta inventore, numquam unde repellat? Laborum, pariatur et ipsam vel sapiente eos amet?
             </p>
-          </div>
+          </div> */}
           {/* Card with button/link */}
-          <div className="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow">
+          {/* <div className="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow">
             <h5 className="text-2xl font-bold tracking-tight text-gray-900 ">Header</h5>
             <h6 className="mb-2">Subheader</h6>
             <p className="mb-3 font-normal text-gray-700">
@@ -171,10 +217,10 @@ export default function TrainingTypeModal() {
                 ></path>
               </svg>
             </a>
-          </div>
-          {/* Card with image */}
+          </div> */}
         </div>
       </div>
+      {/* Card with image */}
       <div className="mt-5 px-3 pb-3">
         <div className="max-w-sm bg-white border border-gray-200 rounded-lg shadow ">
           <div>
