@@ -9,6 +9,7 @@ type DataTableGlobalSearchProps = {
 export const DataTableGlobalSearch = forwardRef<HTMLInputElement, DataTableGlobalSearchProps>(
   ({ wait = 500, table, ...restProps }, forwardedRef) => {
     const [isSearching, setIsSearching] = useState(false);
+
     const [searchVal, setSearchVal] = useState("");
 
     const onSearch = (value: string) => table.setGlobalFilter(value);
@@ -33,14 +34,19 @@ export const DataTableGlobalSearch = forwardRef<HTMLInputElement, DataTableGloba
     const debounceFn = useCallback(debounce(onSearch), []);
 
     return (
-      <div className="relative flex rounded-md">
+      <div className="relative flex rounded-md z-[100]">
         <input
           {...restProps}
           ref={forwardedRef}
+          disabled={table.getCoreRowModel().rows.length === 0}
           type="text"
-          className="py-3 px-4 pl-11 block w-full border-transparent bg-gray-50 rounded-md text-sm focus:z-10 focus:border-indigo-500 focus:ring-indigo-500"
+          value={searchVal}
+          className="py-3 px-4 pl-11 block w-full border-transparent bg-gray-50 rounded-l-md text-sm focus:z-10 focus:border-indigo-500 focus:ring-indigo-500"
           placeholder="Search..."
-          onChange={(e) => debounceFn(e.target.value)}
+          onChange={(e) => {
+            debounceFn(e.target.value);
+            setSearchVal(e.target.value);
+          }}
         />
         <div className="absolute inset-y-0 left-0 flex items-center pointer-events-none z-20 pl-4">
           {!isSearching ? (
@@ -78,6 +84,18 @@ export const DataTableGlobalSearch = forwardRef<HTMLInputElement, DataTableGloba
             </svg>
           )}
         </div>
+        <button
+          type="button"
+          className="py-3 px-4 inline-flex flex-shrink-0 justify-center items-center rounded-r-md border border-transparent font-semibold bg-indigo-500 text-white hover:bg-indigo-600 focus:z-10 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all text-sm"
+          disabled={table.getCoreRowModel().rows.length === 0}
+          onClick={() => {
+            table.resetColumnFilters();
+            table.resetGlobalFilter();
+            setSearchVal("");
+          }}
+        >
+          Reset
+        </button>
       </div>
     );
   }
