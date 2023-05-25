@@ -8,9 +8,9 @@ export const styles = {
     color?: "primary" | "success" | "error"
   ) =>
     cls(
-      "block w-full outline-none border-2 focus:ring-2 rounded-md text-sm transition-colors",
+      "block w-full outline-none border focus:ring-2 shadow-sm rounded-md text-sm transition-colors",
       {
-        "border-gray-100 focus:border-indigo-500 focus:ring-indigo-100 hover:border-indigo-500":
+        "border-gray-200 focus:border-indigo-400 focus:ring-indigo-100 hover:border-indigo-400":
           color === "primary" && !disabled,
 
         "border-emerald-400 focus:border-emerald-500 focus:ring-emerald-100 hover:border-emerald-500":

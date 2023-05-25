@@ -9,8 +9,8 @@ export const SidebarNavigation: FunctionComponent = () => {
   const { activeNav, setActiveNav } = useContext(SidebarContext);
 
   return (
-    <div className="w-12 bg-zinc-800">
-      <div className="flex justify-center items-center h-16 bg-zinc-700/40"></div>
+    <div className="w-14 bg-zinc-800">
+      <div className="flex justify-center items-center h-16"></div>
       <ul className="space-y-2">
         {sidebarItems.map((item, index) => (
           <Fragment key={index}>
