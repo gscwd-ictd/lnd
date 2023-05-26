@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Fragment,
   InputHTMLAttributes,
@@ -94,7 +96,6 @@ export const DataTableColumnSearch = forwardRef<HTMLInputElement, DataTableColum
                 onChange={(e) => {
                   debounceFn(e.target.value);
                   setSearchInput(e.target.value);
-                  //e.target.value === "" ? console.log("empty") : console.log("not empty");
                 }}
               />
               {!isSearching ? (

@@ -4,7 +4,6 @@ import {
   ColumnDef,
   ColumnFiltersState,
   GroupingState,
-  PaginationState,
   Row,
   RowSelectionState,
   SortingState,
@@ -19,13 +18,11 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ReactElement, ReactNode, createContext, useEffect, useMemo, useState } from "react";
+import { ReactElement, ReactNode, createContext, useMemo, useState } from "react";
 import { DataTableColumnHeader } from "../../data-table-column-header/view/DataTableColumnHeader";
 import { DataTableHeader } from "../../data-table-header/view/DataTableHeader";
 import { DataTablePagination } from "../../data-table-pagination/view/DataTablePagination";
-import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { DataTableColumnSort } from "../../data-table-column-sort/view/DataTableColumnSort";
-import { create } from "zustand";
 import { AnimatePresence, motion } from "framer-motion";
 
 export type DataTableProps<T extends unknown> = {
