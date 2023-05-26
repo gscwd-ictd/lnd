@@ -1,5 +1,5 @@
 import { title } from "process";
-import { Alert } from "../../components/osprey/ui/overlays/alert/view/alert";
+import { Alert } from "../../components/osprey/ui/alert/view/Alert";
 import type { Meta, StoryObj } from "@storybook/react";
 
 const meta: Meta<typeof Alert> = {

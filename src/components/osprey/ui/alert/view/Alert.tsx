@@ -169,7 +169,7 @@ export const Alert: FunctionComponent<AlertProps> = ({ title, children, color = 
           <div className="flex">
             <div className="py-1">{startIcon(color)}</div>
             <div>
-              <p className="font-bold">{title}</p>
+              <p className="text-lg font-medium">{title}</p>
               {/* <p className="text-sm">{content}</p> */}
               {children}
             </div>
