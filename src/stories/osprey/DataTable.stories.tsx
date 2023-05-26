@@ -511,7 +511,7 @@ export const WithRowSelection: Story = {
 };
 
 /**
- * This data table component showcases how the table looks like and should behave if there are no data to display.
+ * This data table component showcases how the table looks like and should behave if there is no data to display.
  *
  * - All sortable columns will automatically be disabled.
  * - All filterable columns will automatically be disabled.
