@@ -1,5 +1,4 @@
-import { ComponentPropsWithoutRef, createContext, ForwardRefExoticComponent, ReactNode, RefAttributes } from "react";
-import { Content } from "@radix-ui/react-dialog";
+import { createContext } from "react";
 import { ModalContextState } from "./types";
 
 /**

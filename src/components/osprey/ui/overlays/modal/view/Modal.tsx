@@ -3,9 +3,9 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ElementRef, forwardRef, FunctionComponent, useContext, useState } from "react";
 import { ModalContext } from "../utils/context";
 import { ModalCompositionProps, ModalContentProps } from "../utils/props";
-import { ScrollableArea } from "../../../scrollable-area/view/ScrollableArea";
 import { styles } from "../utils/styles";
 import { ModalContentComposition } from "../utils/types";
+import { useModalStore } from "../utils/store";
 
 /**
  * Copy Dialog.Trigger as ModalTrigger
@@ -45,7 +45,8 @@ export const Modal: FunctionComponent<DialogProps> = ({ children, defaultOpen, m
    * initialize state to listen to the current open state of Dialog.Root
    * expose this state via context so that it can be consumed by the Dialog.Content
    */
-  const [isOpen, setIsOpen] = useState(open);
+  //const [isOpen, setIsOpen] = useState(open);
+  const { isOpen, setIsOpen } = useModalStore();
 
   return (
     <Root
@@ -55,7 +56,7 @@ export const Modal: FunctionComponent<DialogProps> = ({ children, defaultOpen, m
       modal={modal}
       onOpenChange={setIsOpen}
     >
-      <ModalContext.Provider value={{ isOpen, setIsOpen }}>{children}</ModalContext.Provider>
+      {children}
     </Root>
   );
 };
@@ -66,6 +67,7 @@ export const Modal: FunctionComponent<DialogProps> = ({ children, defaultOpen, m
 const modalContent = forwardRef<ElementRef<typeof Content>, ModalContentProps>(
   (
     {
+      isStatic = false,
       fixedHeight = false,
       center = false,
       size = "sm",
@@ -84,7 +86,8 @@ const modalContent = forwardRef<ElementRef<typeof Content>, ModalContentProps>(
      * listen to the current value of Dialog.Root's open state so it can be used
      * by AnimatePresence for controlling the exit animation of ModalContent
      */
-    const { isOpen } = useContext(ModalContext);
+    // const { isOpen, setIsOpen } = useContext(ModalContext);
+    const { isOpen } = useModalStore();
 
     const staticY = {
       initial: {
@@ -209,8 +212,8 @@ const modalContent = forwardRef<ElementRef<typeof Content>, ModalContentProps>(
                 forceMount
                 onOpenAutoFocus={onOpenAutoFocus}
                 onCloseAutoFocus={onCloseAutoFocus}
-                onEscapeKeyDown={onEscapeKeyDown}
-                onPointerDownOutside={onPointerDownOutside}
+                onEscapeKeyDown={(e) => (isStatic ? e.preventDefault() : onEscapeKeyDown)}
+                onPointerDownOutside={(e) => (isStatic ? e.preventDefault() : onPointerDownOutside)}
                 onInteractOutside={onInteractOutside}
               >
                 <div className={styles.content(size, center)}>

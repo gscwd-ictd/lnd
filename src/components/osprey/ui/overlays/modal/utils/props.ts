@@ -16,4 +16,5 @@ export type ModalContentProps = React.ComponentPropsWithoutRef<typeof Content> &
   fixedHeight?: boolean;
   center?: boolean;
   size?: ModalSize;
+  isStatic?: boolean;
 };
