@@ -34,14 +34,14 @@ export const DataTableGlobalSearch = forwardRef<HTMLInputElement, DataTableGloba
     const debounceFn = useCallback(debounce(onSearch), []);
 
     return (
-      <div className="relative flex rounded-md z-[100]">
+      <div className="relative flex rounded-md z-20">
         <input
           {...restProps}
           ref={forwardedRef}
           disabled={table.getCoreRowModel().rows.length === 0}
           type="text"
           value={searchVal}
-          className="py-3 px-4 pl-11 block w-full border-transparent bg-gray-50 rounded-l-md text-sm focus:z-10 focus:border-indigo-500 focus:ring-indigo-500"
+          className="py-3 px-4 pl-11 block w-full border-transparent bg-gray-50 rounded-l-md text-sm focus:z-10 focus:border-indigo-500 focus:ring-indigo-500 transition-colors"
           placeholder="Search..."
           onChange={(e) => {
             debounceFn(e.target.value);
