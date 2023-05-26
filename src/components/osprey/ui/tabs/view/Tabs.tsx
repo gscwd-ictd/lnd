@@ -21,7 +21,7 @@ export const Tabs = forwardRef<ElementRef<typeof Root>, ComponentPropsWithoutRef
     return (
       <Root ref={forwardedRef} {...props} className={`${styles.root} ${className}`}>
         <TabsContext.Provider value={{ orientationState, setOrientationState }}>
-          <div className={`${orientation == "horizontal" ? "flex flex-col" : "flex"}`}>{children}</div>
+          <div className={`${orientation == "horizontal" ? "flex-col block" : "flex"}`}>{children}</div>
         </TabsContext.Provider>
       </Root>
     );
@@ -29,7 +29,7 @@ export const Tabs = forwardRef<ElementRef<typeof Root>, ComponentPropsWithoutRef
 );
 
 export const TabContentWrap: FunctionComponent<TabContentWrapProp> = ({ children }) => {
-  return <div className="border w-full">{children}</div>;
+  return <div className="w-full">{children}</div>;
 };
 
 export const TabsContent = forwardRef<ElementRef<typeof Content>, ComponentPropsWithoutRef<typeof Content>>(
@@ -68,4 +68,3 @@ Tabs.displayName = "Tabs";
 TabsList.displayName = "TabsList";
 TabsContent.displayName = "TabsContent";
 TabsTrigger.displayName = "TabsTrigger";
-// TestList.displayName = "TestList";
