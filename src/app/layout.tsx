@@ -2,7 +2,7 @@ import "../styles/tailwind.css";
 import { Poppins } from "next/font/google";
 import { RootContainer } from "@lms/components/osprey/root-container/view/RootContainer";
 import { PageContent } from "@lms/components/osprey/page-content/view/PageContent";
-import { Sidebar } from "@lms/components/osprey/navigations/sidebar/view/Sidebar";
+import { Sidebar } from "@lms/components/osprey/navigations/side/sidebar/view/Sidebar";
 
 const poppins = Poppins({
   subsets: ["latin"],
