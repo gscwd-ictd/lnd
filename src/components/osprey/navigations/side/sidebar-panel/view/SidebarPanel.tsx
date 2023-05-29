@@ -13,7 +13,7 @@ export const SidebarPanel: FunctionComponent = () => {
       <div className="flex flex-col h-full">
         <SidebarPanelHeader title={sidebarItems[activeNav].header} subtitle={sidebarItems[activeNav].subheader} />
 
-        <main className="flex-1 border-y">
+        <main className="flex-1">
           <ul className="space-y-1">
             {sidebarItems[activeNav].panelItems.map((item, index) => (
               <Fragment key={index}>
