@@ -1,4 +1,4 @@
-import { ModalContentProps } from "./props";
+import { MouseEventHandler } from "react";
 import { Content } from "@radix-ui/react-dialog";
 
 export type ModalSize = "xs" | "sm" | "md" | "lg" | "xl" | "full";
@@ -7,7 +7,7 @@ export type ModalSize = "xs" | "sm" | "md" | "lg" | "xl" | "full";
  * Custom type for combining Dialog.Content props and Modal compound components
  */
 export type ModalContentComposition<T> = React.ForwardRefExoticComponent<
-  ModalContentProps & React.RefAttributes<typeof Content>
+  React.ComponentPropsWithoutRef<typeof Content> & React.RefAttributes<typeof Content>
 > & {
   Title: T;
   Body: T;
@@ -20,4 +20,9 @@ export type ModalContentComposition<T> = React.ForwardRefExoticComponent<
 export type ModalContextState = {
   isOpen: boolean;
   setIsOpen: (state: boolean) => void;
+  isStatic?: boolean;
+  fixedHeight?: boolean;
+  center?: boolean;
+  size?: ModalSize;
+  closeFn?: MouseEventHandler<HTMLButtonElement | undefined>;
 };

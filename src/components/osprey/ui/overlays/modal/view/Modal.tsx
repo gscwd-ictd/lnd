@@ -1,11 +1,10 @@
-import { Root, DialogProps, Content, Portal, Overlay, Trigger, Close } from "@radix-ui/react-dialog";
+import { Root, Content, Portal, Overlay, Trigger, Close } from "@radix-ui/react-dialog";
 import { AnimatePresence, motion } from "framer-motion";
-import { ElementRef, forwardRef, FunctionComponent, useContext, useState } from "react";
+import { ComponentPropsWithoutRef, ElementRef, forwardRef, FunctionComponent, useContext, useState } from "react";
 import { ModalContext } from "../utils/context";
-import { ModalCompositionProps, ModalContentProps } from "../utils/props";
+import { ModalCompositionProps, ModalProps } from "../utils/props";
 import { styles } from "../utils/styles";
 import { ModalContentComposition } from "../utils/types";
-import { useModalStore } from "../utils/store";
 
 /**
  * Copy Dialog.Trigger as ModalTrigger
@@ -40,13 +39,22 @@ export const ModalClose = Close;
  *    </ModalContent>
  * <Modal />
  */
-export const Modal: FunctionComponent<DialogProps> = ({ children, defaultOpen, modal = true, open = false }) => {
+export const Modal: FunctionComponent<ModalProps> = ({
+  isOpen,
+  setIsOpen,
+  isStatic,
+  fixedHeight,
+  center,
+  size = "sm",
+  children,
+  defaultOpen,
+  modal = true,
+  closeFn,
+}) => {
   /**
    * initialize state to listen to the current open state of Dialog.Root
    * expose this state via context so that it can be consumed by the Dialog.Content
    */
-  //const [isOpen, setIsOpen] = useState(open);
-  const { isOpen, setIsOpen } = useModalStore();
 
   return (
     <Root
@@ -56,7 +64,9 @@ export const Modal: FunctionComponent<DialogProps> = ({ children, defaultOpen, m
       modal={modal}
       onOpenChange={setIsOpen}
     >
-      {children}
+      <ModalContext.Provider value={{ isOpen, fixedHeight, center, size, setIsOpen, isStatic, closeFn }}>
+        {children}
+      </ModalContext.Provider>
     </Root>
   );
 };
@@ -64,30 +74,16 @@ export const Modal: FunctionComponent<DialogProps> = ({ children, defaultOpen, m
 /**
  * Abstraction component for <Dialog.Content />
  */
-const modalContent = forwardRef<ElementRef<typeof Content>, ModalContentProps>(
-  (
-    {
-      isStatic = false,
-      fixedHeight = false,
-      center = false,
-      size = "sm",
-      children,
-      forceMount,
-      onOpenAutoFocus,
-      onCloseAutoFocus,
-      onEscapeKeyDown,
-      onPointerDownOutside,
-      onInteractOutside,
-      ...props
-    },
-    forwardedRef
-  ) => {
+const modalContent = forwardRef<ElementRef<typeof Content>, ComponentPropsWithoutRef<typeof Content>>(
+  ({ children, forceMount, onEscapeKeyDown, onPointerDownOutside, ...props }, forwardedRef) => {
     /**
      * listen to the current value of Dialog.Root's open state so it can be used
      * by AnimatePresence for controlling the exit animation of ModalContent
      */
     // const { isOpen, setIsOpen } = useContext(ModalContext);
-    const { isOpen } = useModalStore();
+    const { isOpen, isStatic, size, center, fixedHeight } = useContext(ModalContext);
+
+    const [shake, setShake] = useState(false);
 
     const staticY = {
       initial: {
@@ -198,6 +194,7 @@ const modalContent = forwardRef<ElementRef<typeof Content>, ModalContentProps>(
             <div className={styles.container}>
               <Overlay asChild>
                 <motion.div
+                  tabIndex={-1}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
@@ -210,11 +207,22 @@ const modalContent = forwardRef<ElementRef<typeof Content>, ModalContentProps>(
                 ref={forwardedRef}
                 asChild
                 forceMount
-                onOpenAutoFocus={onOpenAutoFocus}
-                onCloseAutoFocus={onCloseAutoFocus}
-                onEscapeKeyDown={(e) => (isStatic ? e.preventDefault() : onEscapeKeyDown)}
-                onPointerDownOutside={(e) => (isStatic ? e.preventDefault() : onPointerDownOutside)}
-                onInteractOutside={onInteractOutside}
+                onEscapeKeyDown={(e) => {
+                  if (isStatic) {
+                    e.preventDefault();
+                    setShake(true);
+                  } else {
+                    onEscapeKeyDown?.(e);
+                  }
+                }}
+                onPointerDownOutside={(e) => {
+                  if (isStatic) {
+                    e.preventDefault();
+                    setShake(true);
+                  } else {
+                    onPointerDownOutside?.(e);
+                  }
+                }}
               >
                 <div className={styles.content(size, center)}>
                   <motion.div
@@ -223,7 +231,8 @@ const modalContent = forwardRef<ElementRef<typeof Content>, ModalContentProps>(
                     animate={fixedHeight ? staticY.animate : dynamicY.animate}
                     exit={fixedHeight ? staticY.exit : dynamicY.exit}
                     transition={{ duration: 0.25, ease: "easeInOut" }}
-                    className={styles.motionDiv(size)}
+                    className={styles.motionDiv(size, shake)}
+                    onAnimationEnd={() => setShake(false)}
                   >
                     {children}
                   </motion.div>
@@ -241,7 +250,35 @@ const modalContent = forwardRef<ElementRef<typeof Content>, ModalContentProps>(
  * Custom Title component for ModalContent
  */
 const Title: FunctionComponent<ModalCompositionProps> = ({ children }) => {
-  return <div className={styles.title}>{children}</div>;
+  const { closeFn, setIsOpen } = useContext(ModalContext);
+
+  return (
+    <div className={styles.title}>
+      <div className="flex items-start w-full justify-between">
+        <div>{children}</div>
+        {closeFn ? (
+          <button
+            onClick={(event) => {
+              setIsOpen(false);
+              closeFn(event);
+            }}
+            className="h-7 w-7 flex items-center justify-center rounded-full text-gray-600 hover:bg-gray-100 transition-colors"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={2}
+              stroke="currentColor"
+              className="w-5 h-5"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        ) : null}
+      </div>
+    </div>
+  );
 };
 
 /**
