@@ -2,16 +2,11 @@ import { Action, Close, Description, Provider, Root, Title, Viewport } from "@ra
 import { ComponentPropsWithoutRef, ElementRef, forwardRef, FunctionComponent, ReactNode } from "react";
 import { styles } from "../utils/style";
 import { AnimatePresence, motion } from "framer-motion";
-import { useToastStore } from "../utils/store";
+import { ToastProps, useToastStore } from "../utils/store";
 
-type ToastProps = {
-  title?: string;
-  content?: string;
-  children?: ReactNode | ReactNode[];
-};
-
-const Toasts: FunctionComponent<ToastProps> = ({ title, content, children }) => {
+export const Toast: FunctionComponent<ToastProps> = ({ startIcon, color = "success", title, content, children }) => {
   const open = useToastStore((state) => state.open);
+
   return (
     <AnimatePresence>
       {open ? (
@@ -19,48 +14,35 @@ const Toasts: FunctionComponent<ToastProps> = ({ title, content, children }) => 
           initial={{ x: 50, opacity: 0 }}
           animate={{ x: 1, opacity: 1 }}
           exit={{ x: 50, opacity: 0, transition: { duration: 0.25 } }}
-          className="flex md:w-full md:max-w-sm shadow-lg rounded-lg bg-white border"
+          className={`${styles.wrapper({ color })}`}
         >
-          <div className="w-0 flex-1 flex items-center pl-5 py-4">
+          {startIcon && <div className="pt-3 pl-3">{startIcon}</div>}
+          <div className="w-0 flex-1 flex items-center pl-5 py-3">
             <div className="w-full">
-              {title && <Title className={`${styles.title}`}>{title}</Title>}
-              <Description className={`${styles.description}`}>{content}</Description>
+              {title && <Title className={`${styles.title({ color })}`}>{title}</Title>}
+              <Description className={`${styles.description({ color })}`}>{content}</Description>
+              {children && (
+                <div className="mt-4">
+                  <div className="flex space-x-3">{children}</div>
+                </div>
+              )}
             </div>
           </div>
           <div className="flex">
-            <div className="flex flex-col px-3 py-2 space-y-1">
-              <div className="h-0 flex-1 flex">
-                <Close className={`${styles.close}`}>
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="w-5 h-5 text-gray-600"
-                  >
-                    <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-                    <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
-                    <g id="SVGRepo_iconCarrier">
-                      <g id="Menu / Close_SM">
-                        <path
-                          id="Vector"
-                          d="M16 16L12 12M12 12L8 8M12 12L16 8M12 12L8 16"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        ></path>
-                      </g>
-                    </g>
-                  </svg>
-                </Close>
-              </div>
-              <div className="h-0 flex-1 flex">
-                {children && (
-                  <Action asChild altText="Test">
-                    {children}
-                  </Action>
-                )}
-              </div>
+            <div className="flex flex-col px-3 pt-1 space-y-1">
+              <Close className={`${styles.close}`}>
+                <svg
+                  className={`${styles.closeIcon({ color })}`}
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M6.2253 4.81108C5.83477 4.42056 5.20161 4.42056 4.81108 4.81108C4.42056 5.20161 4.42056 5.83477 4.81108 6.2253L10.5858 12L4.81114 17.7747C4.42062 18.1652 4.42062 18.7984 4.81114 19.1889C5.20167 19.5794 5.83483 19.5794 6.22535 19.1889L12 13.4142L17.7747 19.1889C18.1652 19.5794 18.7984 19.5794 19.1889 19.1889C19.5794 18.7984 19.5794 18.1652 19.1889 17.7747L13.4142 12L19.189 6.2253C19.5795 5.83477 19.5795 5.20161 19.189 4.81108C18.7985 4.42056 18.1653 4.42056 17.7748 4.81108L12 10.5858L6.2253 4.81108Z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </Close>
             </div>
           </div>
         </motion.div>
@@ -69,8 +51,8 @@ const Toasts: FunctionComponent<ToastProps> = ({ title, content, children }) => 
   );
 };
 
-export const Toast = forwardRef<ElementRef<typeof Root>, ComponentPropsWithoutRef<typeof Root>>(
-  ({ title, content, ...props }, forwardedRef) => {
+export const ToastRoot = forwardRef<ElementRef<typeof Root>, ComponentPropsWithoutRef<typeof Root>>(
+  ({ duration, children, ...props }, forwardedRef) => {
     const { open, setOpen } = useToastStore();
 
     return (
@@ -81,8 +63,10 @@ export const Toast = forwardRef<ElementRef<typeof Root>, ComponentPropsWithoutRe
         open={open}
         onOpenChange={setOpen}
         forceMount
+        duration={duration}
       >
-        <Toasts title={title} content={content} />
+        {/* <Toasts title={title} content={content} /> */}
+        {children}
       </Root>
     );
   }
@@ -92,4 +76,4 @@ export const ToastProvider = Provider;
 
 export const ToastViewport = Viewport;
 
-Toast.displayName = "Toast";
+ToastRoot.displayName = "ToastRoot";
