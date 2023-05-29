@@ -2,7 +2,7 @@ import cls from "classnames";
 import { ModalSize } from "./types";
 
 export const styles = {
-  container: "fixed inset-0 transition-all",
+  container: "fixed inset-0 transition-all z-40",
   overlay: "fixed inset-0 bg-black/20 backdrop-blur-sm dark:bg-opacity-0",
   content: (size: ModalSize | undefined, center: boolean | undefined) =>
     cls("flex flex-col items-center w-full h-full", {
