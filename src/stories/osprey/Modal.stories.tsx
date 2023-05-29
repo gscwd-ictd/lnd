@@ -1,9 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { Modal, ModalContent, ModalTrigger } from "../../components/osprey/ui/overlays/modal/view/Modal";
 import { Button } from "../../components/osprey/ui/button/view/Button";
-import { useContext, useState } from "react";
-import { ModalContext } from "../../components/osprey/ui/overlays/modal/utils/context";
-import { useModalStore } from "../..//components/osprey/ui/overlays/modal/utils/store";
+import { useState } from "react";
 
 const meta: Meta<typeof Modal> = {
   title: "Example/Modal",
@@ -19,7 +17,7 @@ const ModalDynamicHeight = () => {
 
   return (
     <div className="h-96 w-full flex items-center justify-center overflow-hidden">
-      <Modal open={open} onOpenChange={setOpen}>
+      <Modal isOpen={open} setIsOpen={setOpen}>
         <ModalTrigger asChild>
           <Button>Open Modal</Button>
         </ModalTrigger>
@@ -69,11 +67,11 @@ const ModalFixedHeightXs = () => {
 
   return (
     <div className="h-96 w-full flex items-center justify-center overflow-hidden">
-      <Modal open={open} onOpenChange={setOpen}>
+      <Modal isOpen={open} setIsOpen={setOpen} fixedHeight size="xs">
         <ModalTrigger asChild>
           <Button>Open Modal</Button>
         </ModalTrigger>
-        <ModalContent fixedHeight size="xs">
+        <ModalContent>
           <ModalContent.Title>
             <h3 className="text-lg text-gray-700 font-semibold">Modal</h3>
             <p className="text-gray-500 text-sm">This modal component has no fixed height</p>
@@ -119,11 +117,11 @@ const ModalFixedHeightSm = () => {
 
   return (
     <div className="h-96 w-full flex items-center justify-center overflow-hidden">
-      <Modal open={open} onOpenChange={setOpen}>
+      <Modal isOpen={open} setIsOpen={setOpen} fixedHeight size="sm">
         <ModalTrigger asChild>
           <Button>Open Modal</Button>
         </ModalTrigger>
-        <ModalContent fixedHeight size="sm">
+        <ModalContent>
           <ModalContent.Title>
             <h3 className="text-2xl text-gray-700 font-semibold">Modal</h3>
             <p className="text-gray-500">This modal component has no fixed height</p>
@@ -169,11 +167,11 @@ const ModalFixedHeightMd = () => {
 
   return (
     <div className="h-96 w-full flex items-center justify-center overflow-hidden">
-      <Modal open={open} onOpenChange={setOpen}>
+      <Modal isOpen={open} setIsOpen={setOpen} fixedHeight size="md">
         <ModalTrigger asChild>
           <Button>Open Modal</Button>
         </ModalTrigger>
-        <ModalContent fixedHeight size="md">
+        <ModalContent>
           <ModalContent.Title>
             <h3 className="text-2xl text-gray-700 font-semibold">Modal</h3>
             <p className="text-gray-500">This modal component has no fixed height</p>
@@ -219,11 +217,11 @@ const ModalFixedHeightLg = () => {
 
   return (
     <div className="h-96 w-full flex items-center justify-center overflow-hidden">
-      <Modal open={open} onOpenChange={setOpen}>
+      <Modal isOpen={open} setIsOpen={setOpen} fixedHeight size="lg">
         <ModalTrigger asChild>
           <Button>Open Modal</Button>
         </ModalTrigger>
-        <ModalContent fixedHeight size="lg">
+        <ModalContent>
           <ModalContent.Title>
             <h3 className="text-2xl text-gray-700 font-semibold">Modal</h3>
             <p className="text-gray-500">This modal component has no fixed height</p>
@@ -269,11 +267,11 @@ const ModalFixedHeightXl = () => {
 
   return (
     <div className="h-96 w-full flex items-center justify-center overflow-hidden">
-      <Modal open={open} onOpenChange={setOpen}>
+      <Modal isOpen={open} setIsOpen={setOpen} fixedHeight size="xl">
         <ModalTrigger asChild>
           <Button>Open Modal</Button>
         </ModalTrigger>
-        <ModalContent fixedHeight size="xl">
+        <ModalContent>
           <ModalContent.Title>
             <h3 className="text-2xl text-gray-700 font-semibold">Modal</h3>
             <p className="text-gray-500">This modal component has no fixed height</p>
@@ -319,11 +317,11 @@ const ModalFixedHeightFull = () => {
 
   return (
     <div className="h-96 w-full flex items-center justify-center overflow-hidden">
-      <Modal open={open} onOpenChange={setOpen}>
+      <Modal isOpen={open} setIsOpen={setOpen} fixedHeight size="full">
         <ModalTrigger asChild>
           <Button>Open Modal</Button>
         </ModalTrigger>
-        <ModalContent fixedHeight size="full">
+        <ModalContent>
           <ModalContent.Title>
             <h3 className="text-2xl text-gray-700 font-semibold">Modal</h3>
             <p className="text-gray-500">This modal component has no fixed height</p>
@@ -364,42 +362,28 @@ const ModalFixedHeightFull = () => {
   );
 };
 
-const ModalStatic = () => {
-  const { isOpen, setIsOpen } = useModalStore();
+const ModalStaticWithCustomCloseFunction = () => {
+  const [isOpen, setIsOpen] = useState(false);
 
   const [modalStatic] = useState(true);
 
   return (
     <div className="h-96 w-full flex items-center justify-center overflow-hidden">
-      <Modal open={isOpen} onOpenChange={setIsOpen}>
+      <Modal
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        fixedHeight
+        size="md"
+        isStatic={modalStatic}
+        closeFn={() => console.log("close button")}
+      >
         <ModalTrigger asChild>
           <Button>Open Modal</Button>
         </ModalTrigger>
-        <ModalContent fixedHeight size="md" isStatic={modalStatic}>
+        <ModalContent>
           <ModalContent.Title>
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="text-2xl text-gray-700 font-semibold">Modal</h3>
-                <p className="text-gray-500">This modal component has no fixed height</p>
-              </div>
-              <button
-                disabled={modalStatic}
-                className={`${
-                  modalStatic ? "text-gray-400" : "text-gray-700"
-                } h-8 w-8 rounded-full bg-gray-100 flex items-center justify-center`}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="w-5 h-5"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
+            <h3 className="text-2xl text-gray-700 font-semibold">Modal</h3>
+            <p className="text-gray-500">This modal component has a custom close function</p>
           </ModalContent.Title>
           <ModalContent.Body>
             <p>
@@ -425,9 +409,6 @@ const ModalStatic = () => {
           </ModalContent.Body>
           <ModalContent.Footer>
             <div className="flex items-center justify-end gap-2 py-2">
-              <Button size="small" variant="ghost" onClick={() => setIsOpen(false)}>
-                Cancel
-              </Button>
               <Button size="small">Confirm</Button>
             </div>
           </ModalContent.Footer>
@@ -465,6 +446,6 @@ export const FixedHeightFull: Story = {
   render: () => <ModalFixedHeightFull />,
 };
 
-export const Static: Story = {
-  render: () => <ModalStatic />,
+export const StaticCloseFunction: Story = {
+  render: () => <ModalStaticWithCustomCloseFunction />,
 };
