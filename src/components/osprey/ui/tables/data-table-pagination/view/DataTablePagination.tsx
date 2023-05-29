@@ -77,32 +77,25 @@ export const DataTablePagination = <T extends unknown>({ table }: DataTablePagin
       </span>
 
       <div className="scale-90">
-        <div className="relative">
+        <div className="relative group">
           <input
             type="number"
-            id="hs-inline-leading-pricing-select-label"
-            name="inline-add-on"
             placeholder="Go to page..."
             // defaultValue={table.getState().pagination.pageIndex + 1}
             onChange={(e) => {
               const page = e.target.value ? Number(e.target.value) - 1 : 0;
               table.setPageIndex(page);
             }}
-            className="py-3 px-4 bg-gray-50 pr-20 block w-56 border-transparent rounded-md text-sm focus:z-10 focus:border-indigo-500 focus:ring-indigo-500"
+            className="py-3 px-4 placeholder:text-gray-400 text-sm group-hover:bg-gray-50 transition-colors pr-20 block w-56 border-transparent rounded-md focus:z-10 focus:border-indigo-500 focus:ring-indigo-500"
           />
 
           <div className="absolute inset-y-0 right-0 flex items-center text-gray-500 pr-px">
-            <label htmlFor="hs-inline-leading-select-currency" className="sr-only">
-              Currency
-            </label>
             <select
-              id="hs-inline-leading-select-currency"
-              name="hs-inline-leading-select-currency"
               value={table.getState().pagination.pageSize}
               onChange={(e) => {
                 table.setPageSize(Number(e.target.value));
               }}
-              className="block bg-gray-50 w-full border-transparent rounded-md focus:ring-indigo-600 focus:border-indigo-600"
+              className="block group-hover:bg-gray-50 transition-colors w-full border-transparent rounded-md focus:ring-indigo-600 focus:border-indigo-600"
             >
               {[10, 20, 30, 40, 50].map((pageSize) => (
                 <option key={pageSize} value={pageSize}>

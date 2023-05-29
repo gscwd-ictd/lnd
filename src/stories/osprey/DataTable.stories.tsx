@@ -236,6 +236,7 @@ const personColumnsWithActionButtons = [
       </div>
     ),
     enableSorting: false,
+    enableColumnFilter: false,
   }),
 ];
 

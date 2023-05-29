@@ -32,6 +32,7 @@ export type DataTableProps<T extends unknown> = {
   title?: string;
   subtitle?: string;
   children?: ReactNode;
+  enableGlobalFilter?: boolean;
 };
 
 type DataTableContextState<T> = {
@@ -46,6 +47,7 @@ export const DataTable = <T extends unknown>({
   onRowClick,
   title,
   subtitle,
+  enableGlobalFilter = true,
   children,
 }: DataTableProps<T>): ReactElement => {
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -85,7 +87,7 @@ export const DataTable = <T extends unknown>({
 
   return (
     <div className="relative border rounded overflow-clip overflow-x-auto shadow-md shadow-gray-50">
-      <DataTableHeader<T> title={title} subtitle={subtitle} table={table} />
+      <DataTableHeader<T> title={title} subtitle={subtitle} table={table} enableGlobalFilter={enableGlobalFilter} />
 
       <DataTableContext.Provider value={{ table } as DataTableContextState<T>}>
         <AnimatePresence>
@@ -234,7 +236,7 @@ export const DataTable = <T extends unknown>({
       </table>
 
       {tblData.length !== 0 ? (
-        <footer className="border-t pl-2 py-1 w-full">
+        <footer className="border-t pl-2 py-1 w-full bg-white">
           <DataTablePagination<T> table={table} />
         </footer>
       ) : null}
