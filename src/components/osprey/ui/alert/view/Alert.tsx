@@ -170,7 +170,6 @@ export const Alert: FunctionComponent<AlertProps> = ({ title, children, color = 
             <div className="py-1">{startIcon(color)}</div>
             <div>
               <p className="text-lg font-medium">{title}</p>
-              {/* <p className="text-sm">{content}</p> */}
               {children}
             </div>
             <div className="absolute top-0 bottom-0 right-0 px-4 py-3">{closeIcon(color)}</div>
