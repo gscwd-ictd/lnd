@@ -1,5 +1,5 @@
 import cls from "classnames";
-import { ToastProps } from "./store";
+import { ToastProps } from "./props";
 
 type CustomAlertProps = Pick<ToastProps, "color">;
 
@@ -22,7 +22,7 @@ export const styles = {
     }),
   // text-gray-700
   description: ({ color }: CustomAlertProps) =>
-    cls("mt-1 text-sm  ", {
+    cls("mt-1 text-xs  ", {
       "text-gray-700": color === "default",
       "text-teal-800": color === "success",
       "text-red-800": color === "danger",
