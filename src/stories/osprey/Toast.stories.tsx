@@ -1,35 +1,21 @@
-// import { ToastProvider } from "@radix-ui/react-toast";
-import { useState } from "react";
-import { Button } from "../../components/osprey/ui/button/view/Button";
-
 import type { Meta, StoryObj } from "@storybook/react";
-import { useToastStore } from "../../components/osprey/ui/overlays/toast/utils/store";
-import { Toast, ToastProvider, ToastRoot, ToastViewport } from "../../components/osprey/ui/overlays/toast/view/Toast";
+import { Toast } from "../../components/osprey/ui/overlays/toast/view/Toast";
+import { Button } from "../../components/osprey/ui/button/view/Button";
+import { useState } from "react";
+import { render } from "@headlessui/react/dist/utils/render";
 
-const meta: Meta<typeof ToastProvider> = {
+const meta: Meta<typeof Toast> = {
   title: "Example/Toast",
-  component: ToastProvider,
+  component: Toast,
   tags: ["autodocs"],
 };
 
 export default meta;
-type Story = StoryObj<typeof ToastProvider>;
+type Story = StoryObj<typeof Toast>;
 
-const ToastComponent = () => {
-  const { setOpen } = useToastStore();
+const ToastDemo = () => {
+  const [open, setOpen] = useState(false);
   return (
-    // <ToastProvider>
-    //   <Button
-    //     onClick={() => {
-    //       setOpen(true);
-    //     }}
-    //   >
-    //     Sample Toast
-    //   </Button>
-    //   <Toast title="Pull Request Review" content="Someone requested your review on" duration={0.25} />
-    //   <ToastViewport className="ToastViewport" />
-    // </ToastProvider>
-
     <>
       <Button
         onClick={() => {
@@ -38,39 +24,81 @@ const ToastComponent = () => {
       >
         Open Toast
       </Button>
-      <ToastProvider>
-        <ToastRoot duration={2000}>
-          <Toast
-            startIcon={
-              <svg className="w-7 h-7 text-gray-600" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path
-                  fillRule="evenodd"
-                  clipRule="evenodd"
-                  d="M14 3V3.28988C16.8915 4.15043 19 6.82898 19 10V17H20V19H4V17H5V10C5 6.82898 7.10851 4.15043 10 3.28988V3C10 1.89543 10.8954 1 12 1C13.1046 1 14 1.89543 14 3ZM7 17H17V10C17 7.23858 14.7614 5 12 5C9.23858 5 7 7.23858 7 10V17ZM14 21V20H10V21C10 22.1046 10.8954 23 12 23C13.1046 23 14 22.1046 14 21Z"
-                  fill="currentColor"
-                />
-              </svg>
-            }
-            color="default"
-            title="Pull Request Review"
-            content="Lorem ipsum, dolor sit amet consectetur adipisicing elit."
-          >
-            <Button size="small" variant="outline">
-              Undo
-            </Button>
-            <Button size="small" variant="outline">
-              Save
-            </Button>
-          </Toast>
-        </ToastRoot>
-        <ToastViewport className="ToastViewport" />
-      </ToastProvider>
+      <Toast
+        duration={2000}
+        open={open}
+        setOpen={setOpen}
+        color="default"
+        title="Success"
+        content="Successfully Added."
+      />
     </>
   );
 };
 
-export const Toasts: Story = {
-  args: {
-    children: <ToastComponent />,
-  },
+export const ToastDefault: Story = {
+  render: () => <ToastDemo />,
 };
+
+const ToastWithIconStory = () => {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <Button
+        onClick={() => {
+          setOpen(true);
+        }}
+      >
+        Open Toast
+      </Button>
+      <Toast
+        duration={2000}
+        open={open}
+        startIcon={
+          <svg fill="currentColor" viewBox="0 0 16 16" height="1em" width="1em">
+            <path d="M8 15A7 7 0 118 1a7 7 0 010 14zm0 1A8 8 0 108 0a8 8 0 000 16z" />
+            <path d="M10.97 4.97a.235.235 0 00-.02.022L7.477 9.417 5.384 7.323a.75.75 0 00-1.06 1.06L6.97 11.03a.75.75 0 001.079-.02l3.992-4.99a.75.75 0 00-1.071-1.05z" />
+          </svg>
+        }
+        setOpen={setOpen}
+        color="default"
+        title="Success"
+        content="Successfully Added."
+      />
+    </>
+  );
+};
+
+export const ToastWithIcon: Story = {
+  render: () => <ToastWithIconStory />,
+};
+
+// const ToastWithIconStory = () => {
+//   const [open, setOpen] = useState(false);
+//   return (
+//     <>
+//       <Button
+//         onClick={() => {
+//           setOpen(true);
+//         }}
+//       >
+//         Open Toast
+//       </Button>
+//     </>
+//   );
+// };
+// export const ToastWithIcon: Story = {
+//   render: (args) => <ToastWithIconStory />,
+//   args: {
+//     open: true,
+//     startIcon: (
+//       <svg fill="currentColor" viewBox="0 0 16 16" height="1em" width="1em">
+//         <path d="M8 15A7 7 0 118 1a7 7 0 010 14zm0 1A8 8 0 108 0a8 8 0 000 16z" />
+//         <path d="M10.97 4.97a.235.235 0 00-.02.022L7.477 9.417 5.384 7.323a.75.75 0 00-1.06 1.06L6.97 11.03a.75.75 0 001.079-.02l3.992-4.99a.75.75 0 00-1.071-1.05z" />
+//       </svg>
+//     ),
+//     color: "success",
+//     title: "Success",
+//     content: "Successfully Added.",
+//   },
+// };
