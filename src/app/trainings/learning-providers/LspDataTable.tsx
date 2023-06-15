@@ -108,7 +108,7 @@ const columns = [
 export const LspDataTable: FunctionComponent = () => {
   return (
     <DataTable<LearningServiceProvider>
-      datasource={`${url}/lsp-details`}
+      datasource={`${url}/lsp-details?page=1&limit=40`}
       queryKey={["lsp"]}
       columns={columns}
       title="Learning Service Providers"
