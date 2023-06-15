@@ -1,21 +1,18 @@
 "use client";
 
 import { DataTable } from "@lms/components/osprey/ui/tables/data-table/view/DataTable";
-import { FunctionComponent, useEffect, useState } from "react";
+import { FunctionComponent } from "react";
 import { useRouter } from "next/navigation";
-import { TrainingType } from "@lms/utilities/types/training-type.type";
+import { TrainingSource } from "@lms/lib/types/training-source.type";
+import { url } from "@lms/utilities/url/api-url";
 
-type TrainingSourceDataTableProps = {
-  data: TrainingType[];
-};
-
-export const TrainingSourceDataTable: FunctionComponent<TrainingSourceDataTableProps> = ({ data }) => {
+export const TrainingSourceDataTable: FunctionComponent = () => {
   // const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
 
   return (
     <>
-      <DataTable
+      <DataTable<TrainingSource>
         title="Training Sources"
         subtitle="List of Training Source"
         columns={[
@@ -25,7 +22,8 @@ export const TrainingSourceDataTable: FunctionComponent<TrainingSourceDataTableP
             header: "Description ",
           },
         ]}
-        data={data}
+        datasource={`http://172.20.110.45:5286/api/lms/v1/training-types`}
+        queryKey={["trainingsource"]}
         onRowClick={() => {}}
       />
     </>

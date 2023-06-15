@@ -42,6 +42,7 @@ export const ModalClose = Close;
 export const Modal: FunctionComponent<ModalProps> = ({
   isOpen,
   setIsOpen,
+  withCloseBtn = true,
   isStatic,
   fixedHeight,
   center,
@@ -49,7 +50,7 @@ export const Modal: FunctionComponent<ModalProps> = ({
   children,
   defaultOpen,
   modal = true,
-  closeFn,
+  onClose,
 }) => {
   /**
    * initialize state to listen to the current open state of Dialog.Root
@@ -64,7 +65,7 @@ export const Modal: FunctionComponent<ModalProps> = ({
       modal={modal}
       onOpenChange={setIsOpen}
     >
-      <ModalContext.Provider value={{ isOpen, fixedHeight, center, size, setIsOpen, isStatic, closeFn }}>
+      <ModalContext.Provider value={{ isOpen, fixedHeight, center, size, setIsOpen, isStatic, onClose, withCloseBtn }}>
         {children}
       </ModalContext.Provider>
     </Root>
@@ -250,17 +251,17 @@ const modalContent = forwardRef<ElementRef<typeof Content>, ComponentPropsWithou
  * Custom Title component for ModalContent
  */
 const Title: FunctionComponent<ModalCompositionProps> = ({ children }) => {
-  const { closeFn, setIsOpen } = useContext(ModalContext);
+  const { withCloseBtn, onClose, setIsOpen } = useContext(ModalContext);
 
   return (
     <div className={styles.title}>
       <div className="flex items-start w-full justify-between">
         <div>{children}</div>
-        {closeFn ? (
+        {withCloseBtn ? (
           <button
             onClick={(event) => {
               setIsOpen(false);
-              closeFn(event);
+              onClose?.(event);
             }}
             className="h-7 w-7 flex items-center justify-center rounded-full text-gray-600 hover:bg-gray-100 transition-colors"
           >

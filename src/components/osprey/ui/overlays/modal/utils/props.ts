@@ -6,15 +6,16 @@ import { MouseEventHandler, ReactNode } from "react";
  * Type used for modal's compound components - Title, Body, and Footer
  */
 export type ModalCompositionProps = {
-  children: ReactNode | ReactNode[];
+  children?: ReactNode | ReactNode[];
 };
 
-export type ModalProps = DialogProps & {
+export type ModalProps = Omit<DialogProps, "open" | "onOpenChange"> & {
   isOpen: boolean;
   setIsOpen: (state: boolean) => void;
   fixedHeight?: boolean;
   center?: boolean;
   size?: ModalSize;
   isStatic?: boolean;
-  closeFn?: MouseEventHandler<HTMLButtonElement>;
+  withCloseBtn?: boolean;
+  onClose?: MouseEventHandler<HTMLButtonElement>;
 };

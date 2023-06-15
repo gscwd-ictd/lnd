@@ -17,7 +17,7 @@ const ModalDynamicHeight = () => {
 
   return (
     <div className="h-96 w-full flex items-center justify-center overflow-hidden">
-      <Modal isOpen={open} setIsOpen={setOpen} closeFn={() => setOpen(false)}>
+      <Modal isOpen={open} setIsOpen={setOpen}>
         <ModalTrigger asChild>
           <Button>Open Modal</Button>
         </ModalTrigger>
@@ -67,7 +67,7 @@ const ModalFixedHeightXs = () => {
 
   return (
     <div className="h-96 w-full flex items-center justify-center overflow-hidden">
-      <Modal isOpen={open} setIsOpen={setOpen} fixedHeight size="xs" closeFn={() => setOpen(false)}>
+      <Modal isOpen={open} setIsOpen={setOpen} fixedHeight size="xs">
         <ModalTrigger asChild>
           <Button>Open Modal</Button>
         </ModalTrigger>
@@ -117,7 +117,7 @@ const ModalFixedHeightSm = () => {
 
   return (
     <div className="h-96 w-full flex items-center justify-center overflow-hidden">
-      <Modal isOpen={open} setIsOpen={setOpen} fixedHeight size="sm" closeFn={() => setOpen(false)}>
+      <Modal isOpen={open} setIsOpen={setOpen} fixedHeight size="sm">
         <ModalTrigger asChild>
           <Button>Open Modal</Button>
         </ModalTrigger>
@@ -167,7 +167,7 @@ const ModalFixedHeightMd = () => {
 
   return (
     <div className="h-96 w-full flex items-center justify-center overflow-hidden">
-      <Modal isOpen={open} setIsOpen={setOpen} fixedHeight size="md" closeFn={() => setOpen(false)}>
+      <Modal isOpen={open} setIsOpen={setOpen} fixedHeight size="md">
         <ModalTrigger asChild>
           <Button>Open Modal</Button>
         </ModalTrigger>
@@ -217,7 +217,7 @@ const ModalFixedHeightLg = () => {
 
   return (
     <div className="h-96 w-full flex items-center justify-center overflow-hidden">
-      <Modal isOpen={open} setIsOpen={setOpen} fixedHeight size="lg" closeFn={() => setOpen(false)}>
+      <Modal isOpen={open} setIsOpen={setOpen} fixedHeight size="lg">
         <ModalTrigger asChild>
           <Button>Open Modal</Button>
         </ModalTrigger>
@@ -267,7 +267,7 @@ const ModalFixedHeightXl = () => {
 
   return (
     <div className="h-96 w-full flex items-center justify-center overflow-hidden">
-      <Modal isOpen={open} setIsOpen={setOpen} fixedHeight size="xl" closeFn={() => setOpen(false)}>
+      <Modal isOpen={open} setIsOpen={setOpen} fixedHeight size="xl">
         <ModalTrigger asChild>
           <Button>Open Modal</Button>
         </ModalTrigger>
@@ -317,7 +317,7 @@ const ModalFixedHeightFull = () => {
 
   return (
     <div className="h-96 w-full flex items-center justify-center overflow-hidden">
-      <Modal isOpen={open} setIsOpen={setOpen} fixedHeight size="full" closeFn={() => setOpen(false)}>
+      <Modal isOpen={open} setIsOpen={setOpen} fixedHeight size="full">
         <ModalTrigger asChild>
           <Button>Open Modal</Button>
         </ModalTrigger>
@@ -369,14 +369,7 @@ const ModalStaticWithCustomCloseFunction = () => {
 
   return (
     <div className="h-96 w-full flex items-center justify-center overflow-hidden">
-      <Modal
-        isOpen={isOpen}
-        setIsOpen={setIsOpen}
-        fixedHeight
-        size="md"
-        isStatic={modalStatic}
-        closeFn={() => console.log("close button")}
-      >
+      <Modal isOpen={isOpen} setIsOpen={setIsOpen} fixedHeight size="md" isStatic={modalStatic}>
         <ModalTrigger asChild>
           <Button>Open Modal</Button>
         </ModalTrigger>

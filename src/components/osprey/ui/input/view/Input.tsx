@@ -8,7 +8,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     forwardedRef
   ) => {
     return (
-      <div>
+      <div className="w-full">
         <div className="relative">
           <input
             disabled={disabled}

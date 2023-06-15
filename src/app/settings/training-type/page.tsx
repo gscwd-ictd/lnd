@@ -5,13 +5,13 @@ import { TrainingType } from "../../../utilities/types/training-type.type";
 import { Pagination } from "../../../utilities/types/table-pagination.type";
 import Link from "next/link";
 
-export const getData = async () => {
-  const { data } = await axios.get(`${process.env.NEXT_PUBLIC_DOMAIN_SERVER}/training-types`);
-  return data as Pagination<TrainingType>;
-};
+// export const getData = async () => {
+//   const { data } = await axios.get(`${process.env.NEXT_PUBLIC_DOMAIN_SERVER}/training-types`);
+//   return data as Pagination<TrainingType>;
+// };
 
 export default async function TrainingType() {
-  const tableData = await getData();
+  // const tableData = await getData();
 
   return (
     <>
@@ -27,7 +27,7 @@ export default async function TrainingType() {
             </ul>
           </div>
         </div>
-        <TrainingTypeDataTable data={tableData.items} />
+        <TrainingTypeDataTable />
       </div>
     </>
   );

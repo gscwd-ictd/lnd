@@ -3,7 +3,7 @@
 import { Avatar } from "@lms/components/osprey/ui/avatar/view/Avatar";
 import { createColumnHelper } from "@tanstack/react-table";
 import { faker } from "@faker-js/faker";
-import { Person } from "@lms/app/dashboard/reports/page";
+// import { Person } from "@lms/app/dashboard/reports/page";
 import { Checkbox } from "@lms/components/osprey/ui/checkbox/view/Checkbox";
 
 type Pagination<T> = {

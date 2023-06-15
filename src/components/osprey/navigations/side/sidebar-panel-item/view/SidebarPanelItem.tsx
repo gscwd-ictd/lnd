@@ -15,14 +15,12 @@ export const SidebarPanelItem: FunctionComponent<SidebarPanelItemProps> = ({ lab
   const [selected, setSelected] = useState(false);
   const pathName = usePathname();
 
-  useEffect(() => setSelected(pathName === path), [path, pathName]);
+  useEffect(() => setSelected(pathName.split("/")[2] === path.split("/")[2]), [path, pathName]);
 
   return (
-    <li>
-      <Link href={path} className={styles.panelItem(selected)}>
-        <span>{children}</span>
-        <p className="text-sm font-medium">{label}</p>
-      </Link>
-    </li>
+    <Link href={path} className={styles.panelItem(selected)}>
+      <span>{children}</span>
+      <p className="text-sm font-medium">{label}</p>
+    </Link>
   );
 };

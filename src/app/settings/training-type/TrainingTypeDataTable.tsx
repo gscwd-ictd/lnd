@@ -6,20 +6,21 @@ import { useRouter } from "next/navigation";
 import { UdpdateTrainingTypeModal } from "./UpdateTrainingTypeModal";
 import { DeleteTrainingTypeModal } from "./DeleteTrainingTypeModal";
 import { TrainingType } from "@lms/utilities/types/training-type.type";
+import { url } from "@lms/utilities/url/api-url";
 
-type TrainingTypeDataTableProps = {
-  data: TrainingType[];
-};
+// type TrainingTypeDataTableProps = {
+//   data: TrainingType[];
+// };
 
-export const TrainingTypeDataTable: FunctionComponent<TrainingTypeDataTableProps> = ({ data }) => {
+export const TrainingTypeDataTable: FunctionComponent = () => {
   // const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
 
-  useEffect(() => console.log("triggered"), [data]);
+  // useEffect(() => console.log("triggered"), [data]);
 
   return (
     <>
-      <DataTable
+      <DataTable<TrainingType>
         title="Training Types"
         subtitle="List of Training Types"
         columns={[
@@ -41,7 +42,8 @@ export const TrainingTypeDataTable: FunctionComponent<TrainingTypeDataTableProps
             header: "Actions",
           },
         ]}
-        data={data}
+        datasource={`http://172.20.110.45:5286/api/lms/v1/training-types`}
+        queryKey={["trainingtype"]}
         onRowClick={() => {}}
       />
       {/* <Modal></Modal> */}

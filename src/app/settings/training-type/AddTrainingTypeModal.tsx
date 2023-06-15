@@ -10,6 +10,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import axios from "axios";
+import { url } from "@lms/utilities/url/api-url";
 
 const schema = yup
   .object({
@@ -30,7 +31,7 @@ export const AddTrainingTypeModal = () => {
   });
 
   const onSubmit: SubmitHandler<TrainingType> = async (data) => {
-    const res = await axios.post(`${process.env.NEXT_PUBLIC_DOMAIN_SERVER}/training-types`, data);
+    const res = await axios.post(`${url}/training-types`, data);
     setIsOpenToast(true);
     setIsOpen(false);
   };
@@ -61,7 +62,7 @@ export const AddTrainingTypeModal = () => {
         setIsOpen={setIsOpen}
         size="md"
         isStatic={true}
-        closeFn={() => {
+        onClose={() => {
           setError("name", { message: "" });
         }}
       >

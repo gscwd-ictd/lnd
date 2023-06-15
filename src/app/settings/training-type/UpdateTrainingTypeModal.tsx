@@ -7,6 +7,7 @@ import { Input } from "@lms/components/osprey/ui/input/view/Input";
 import { Button } from "@lms/components/osprey/ui/button/view/Button";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { TrainingType } from "@lms/utilities/types/training-type.type";
+import { url } from "@lms/utilities/url/api-url";
 
 export const UdpdateTrainingTypeModal = ({ id }: { id: string }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -19,14 +20,14 @@ export const UdpdateTrainingTypeModal = ({ id }: { id: string }) => {
   } = useForm<TrainingType>();
 
   const onSubmit: SubmitHandler<TrainingType> = async (data) => {
-    const res = await axios.patch(`${process.env.NEXT_PUBLIC_DOMAIN_SERVER}/training-types/${id}`, data);
+    const res = await axios.patch(`${url}/training-types/${id}`, data);
     setIsOpen(false);
   };
 
   //Initialize training type name
   useEffect(() => {
     const getData = async () => {
-      const { data } = await axios.get(`${process.env.NEXT_PUBLIC_DOMAIN_SERVER}/training-types/${id}`);
+      const { data } = await axios.get(`${url}/training-types/${id}`);
       setTrainingType(data);
     };
     getData();
@@ -55,7 +56,7 @@ export const UdpdateTrainingTypeModal = ({ id }: { id: string }) => {
         setIsOpen={setIsOpen}
         size="md"
         isStatic={true}
-        closeFn={() => console.log("close button")}
+        onClose={() => console.log("close button")}
       >
         <ModalTrigger asChild></ModalTrigger>
         <ModalContent>

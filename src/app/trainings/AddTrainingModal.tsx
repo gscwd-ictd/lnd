@@ -31,7 +31,7 @@ export const AddTrainingModal = () => {
         </svg>
         Add New
       </Button>
-      <Modal isOpen={isOpen} setIsOpen={setIsOpen} size="lg" isStatic={true} closeFn={() => {}}>
+      <Modal isOpen={isOpen} setIsOpen={setIsOpen} size="lg" isStatic={true} fixedHeight>
         <ModalTrigger asChild></ModalTrigger>
         <ModalContent>
           <ModalContent.Title>

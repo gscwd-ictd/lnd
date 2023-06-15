@@ -42,7 +42,7 @@ export const DeleteTrainingTypeModal = ({ id }: { id: string }) => {
         setIsOpen={setIsOpen}
         size="md"
         isStatic={true}
-        closeFn={() => console.log("close button")}
+        onClose={() => console.log("close button")}
       >
         <ModalTrigger asChild></ModalTrigger>
         <ModalContent>

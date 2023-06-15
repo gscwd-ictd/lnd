@@ -19,7 +19,7 @@ export const styles = {
   },
 
   childrenContainer: "h-full flex flex-col",
-  title: "pl-4 pr-2 py-2 border-b",
+  title: "p-4",
   body: "p-4 flex-1 overflow-y-auto overflow-clip",
-  footer: "px-4 py-2 border-t",
+  footer: "px-4 py-2",
 };

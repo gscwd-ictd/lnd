@@ -6,13 +6,13 @@ import Link from "next/link";
 import { AddTrainingModal } from "./AddTrainingModal";
 // import { TestButton } from "./AddTrainingButton";
 
-export const getData = async () => {
-  const { data } = await axios.get(`${process.env.NEXT_PUBLIC_DOMAIN_SERVER}/trainings`);
-  return data as Pagination<Training>;
-};
+// export const getData = async () => {
+//   const { data } = await axios.get(`${process.env.NEXT_PUBLIC_DOMAIN_SERVER}/trainings`);
+//   return data as Pagination<Training>;
+// };
 
 export default async function TrainingsAndSeminars() {
-  const tableData = await getData();
+  // const tableData = await getData();
   return (
     <>
       <div className="p-5">
@@ -28,7 +28,8 @@ export default async function TrainingsAndSeminars() {
             </ul>
           </div>
         </div>
-        <TrainingsDataTable data={tableData.items} />
+        {/* <TrainingsDataTable data={tableData.items} /> */}
+        <TrainingsDataTable />
       </div>
     </>
   );

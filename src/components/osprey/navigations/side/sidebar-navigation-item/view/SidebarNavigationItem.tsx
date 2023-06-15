@@ -1,10 +1,10 @@
 "use client";
 
 import { FunctionComponent } from "react";
-import { useRouter } from "next/navigation";
 import { SidebarNavigationItemProps } from "../utils/props";
 import { styles } from "../utils/styles";
 import * as Tooltip from "@radix-ui/react-tooltip";
+import Link from "next/link";
 
 export const SidebarNavigationItem: FunctionComponent<SidebarNavigationItemProps> = ({
   selected,
@@ -13,22 +13,13 @@ export const SidebarNavigationItem: FunctionComponent<SidebarNavigationItemProps
   children,
   onSelect,
 }) => {
-  const router = useRouter();
-
   return (
     <Tooltip.Provider delayDuration={0}>
       <Tooltip.Root>
         <Tooltip.Trigger asChild>
-          <li
-            role="button"
-            className={styles.navItem(selected)}
-            onClick={(e) => {
-              router.push(path);
-              onSelect(e);
-            }}
-          >
+          <Link role="button" href={path} className={styles.navItem(selected)} onClick={(e) => onSelect(e)}>
             {children}
-          </li>
+          </Link>
         </Tooltip.Trigger>
 
         <Tooltip.Portal>

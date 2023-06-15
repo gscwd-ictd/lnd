@@ -1,6 +1,6 @@
 "use client";
 
-import { FunctionComponent, useEffect, useMemo, useState } from "react";
+import { FunctionComponent, useContext, useEffect, useMemo, useState } from "react";
 import { SidebarContext } from "../utils/contexts";
 import { styles } from "../utils/styles";
 import { SidebarNavigation } from "../../sidebar-navigation/view/SidebarNavigation";
@@ -9,7 +9,8 @@ import { usePathname } from "next/navigation";
 import { sidebarItems } from "../constants/sidebar-items";
 
 export const Sidebar: FunctionComponent = () => {
-  const [activeNav, setActiveNav] = useState(0);
+  //const [activeNav, setActiveNav] = useState(0);
+  const { setActiveNav } = useContext(SidebarContext);
 
   const pathname = usePathname();
 
@@ -21,14 +22,12 @@ export const Sidebar: FunctionComponent = () => {
         }
       });
     });
-  }, [pathname]);
+  }, [pathname, setActiveNav]);
 
   return (
     <aside className={styles.sidebar()}>
-      <SidebarContext.Provider value={{ activeNav, setActiveNav }}>
-        <SidebarNavigation />
-        <SidebarPanel />
-      </SidebarContext.Provider>
+      <SidebarNavigation />
+      <SidebarPanel />
     </aside>
   );
 };
