@@ -17,7 +17,7 @@ import { Certifications } from "./Certifications";
 import { LspDetailsSummary } from "./LspDetailsSummary";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { AnimatePresence, motion } from "framer-motion";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useLspDetailsStore } from "@lms/utilities/stores/lsp-details-store";
 import { url } from "@lms/utilities/url/api-url";
@@ -30,6 +30,8 @@ export const AddNewLspModal: FunctionComponent = () => {
 
   const trainingSourceId = useLspDetailsStore((state) => state.trainingSource);
   const setTrainingSource = useLspDetailsStore((state) => state.setTrainingSource);
+
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     const getTrainingSource = async () => {
@@ -64,7 +66,10 @@ export const AddNewLspModal: FunctionComponent = () => {
   } = useLspDetailsStore();
 
   const lspDataTableMutation = useMutation({
-    onSuccess: () => setOpen(false),
+    onSuccess: (data, variable) => {
+      setOpen(false);
+      queryClient.refetchQueries({ queryKey: ["lsp"], type: "all", exact: true, stale: true });
+    },
     onError: () => console.log("error"),
     mutationFn: async () => {
       const response = await axios.post(`${url}/lsp-details`, {
