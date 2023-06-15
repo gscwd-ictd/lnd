@@ -24,5 +24,6 @@ export type ModalContextState = {
   fixedHeight?: boolean;
   center?: boolean;
   size?: ModalSize;
-  closeFn?: MouseEventHandler<HTMLButtonElement | undefined>;
+  onClose?: MouseEventHandler<HTMLButtonElement | undefined>;
+  withCloseBtn?: boolean;
 };
