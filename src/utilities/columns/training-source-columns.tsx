@@ -64,10 +64,10 @@ export const trainingSourceColumns = [
   // }),
 ];
 
-const personHelper = createColumnHelper<Person>();
+const personHelper = createColumnHelper<TrainingSource>();
 
 export const personColumns = [
-  personHelper.accessor("photoUrl", {
+  personHelper.accessor("id", {
     header: ({ table }) => (
       <div className="pl-2">
         <Checkbox
@@ -106,19 +106,19 @@ export const personColumns = [
     // ),
   }),
 
-  personHelper.accessor("company", {
-    header: "Company",
-    cell: (info) => info.getValue(),
-  }),
+  // personHelper.accessor("", {
+  //   header: "Company",
+  //   cell: (info) => info.getValue(),
+  // }),
 
-  personHelper.accessor("address", {
-    header: "Address",
-    cell: (info) => info.getValue(),
-    // enableSorting: false,
-  }),
+  // personHelper.accessor("address", {
+  //   header: "Address",
+  //   cell: (info) => info.getValue(),
+  //   // enableSorting: false,
+  // }),
 
-  personHelper.accessor("country", {
-    header: "Country",
-    cell: (info) => info.getValue(),
-  }),
+  // personHelper.accessor("country", {
+  //   header: "Country",
+  //   cell: (info) => info.getValue(),
+  // }),
 ];

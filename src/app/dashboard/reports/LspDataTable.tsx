@@ -1,7 +1,7 @@
 "use client";
 
 import { FunctionComponent, useState } from "react";
-import { Person } from "./page";
+import { Person, TrainingSource } from "./page";
 import { personColumns } from "@lms/utilities/columns/training-source-columns";
 import { DataTable } from "@lms/components/osprey/ui/tables/data-table/view/DataTable";
 import { SlideOver } from "@lms/components/osprey/ui/overlays/slider-over/view/SliderOver";
@@ -10,7 +10,7 @@ import { Button } from "@lms/components/osprey/ui/button/view/Button";
 import { DataTableDefaultSelectionToolbar } from "@lms/components/osprey/ui/tables/data-table-default-selection-toolbar/view/DataTableDefaultSelectionToolbar";
 
 type LspDataTableProps = {
-  data: Person[];
+  data: TrainingSource[];
 };
 
 export const LspDataTable: FunctionComponent<LspDataTableProps> = ({ data }) => {
@@ -148,15 +148,15 @@ export const LspDataTable: FunctionComponent<LspDataTableProps> = ({ data }) => 
           </>
         )}
       </SlideOver>
-      <DataTable<Person>
+      <DataTable<TrainingSource>
         data={data}
         columns={personColumns}
         title="Learning Service Providers"
         subtitle="Lorem ipsum dolor sit amet consectetur adipisicing elit."
-        onRowClick={(row) => {
-          setPerson(row.original);
-          // setOpen(true);
-        }}
+        // onRowClick={(row) => {
+        //   setPerson(row.original);
+        //   // setOpen(true);
+        // }}
       >
         <DataTableDefaultSelectionToolbar />
       </DataTable>

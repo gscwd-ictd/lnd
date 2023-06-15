@@ -454,11 +454,11 @@ export const getPersons = async () => {
 };
 
 export default async function DashboardReports() {
-  const tableData = await getPersons();
+  const tableData = await getData();
 
   return (
     <div className="p-5">
-      <LspDataTable data={tableData} />
+      <LspDataTable data={tableData.items} />
     </div>
   );
 }
