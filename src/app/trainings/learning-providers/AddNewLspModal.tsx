@@ -196,7 +196,7 @@ export const AddNewLspModal: FunctionComponent = () => {
         </ModalContent.Title>
         <ModalContent.Body>
           {source === "External" ? (
-            <main className="px-2 space-y-3">
+            <main className="px-2 space-y-2">
               {page === 1 && <PersonalInformation />}
               {page === 2 && <ContactInformation />}
               {page === 3 && <SubjectMatterExpertise />}

@@ -61,7 +61,7 @@ export const SubjectMatterExpertise: FunctionComponent = () => {
 
       {expertise.length === 0 ? (
         <div className="border-2 bg-gray-50/50 rounded-lg border-dashed w-full flex items-center justify-center">
-          <div className="py-7">
+          <div className="py-4">
             <div className="flex justify-center">
               <UndrawContractSvg />
             </div>

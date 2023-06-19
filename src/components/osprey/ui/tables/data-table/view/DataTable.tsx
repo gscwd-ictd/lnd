@@ -90,7 +90,6 @@ export const DataTable = <T extends unknown>({
       setMyData(data.items);
       return data;
     },
-    // refetchInterval: 1000,
   });
 
   const table = useReactTable({

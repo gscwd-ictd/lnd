@@ -45,7 +45,7 @@ export type LspDetailsStore = {
   email: string;
   postalAddress: string;
   trainingSource: string;
-  experience: number;
+  experience: number | null;
   expertise: LspExpertise[];
   education: LspEducation[];
   trainings: LspTraining[];
@@ -86,7 +86,7 @@ export const useLspDetailsStore = create<LspDetailsStore>((set) => ({
   email: "",
   postalAddress: "",
   trainingSource: "",
-  experience: -1,
+  experience: null,
   expertise: [],
   education: [],
   trainings: [],
