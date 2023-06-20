@@ -17,7 +17,7 @@ import { Certifications } from "./Certifications";
 import { LspDetailsSummary } from "./LspDetailsSummary";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { AnimatePresence, motion } from "framer-motion";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useLspDetailsStore } from "@lms/utilities/stores/lsp-details-store";
 import { url } from "@lms/utilities/url/api-url";

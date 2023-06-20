@@ -6,8 +6,8 @@ export const styles = {
   overlay: "fixed inset-0 bg-black/20 backdrop-blur-sm dark:bg-opacity-0",
   content: (size: ModalSize | undefined, center: boolean | undefined) =>
     cls("flex flex-col items-center w-full h-full", {
-      "pt-10": !center && size !== "full",
-      "py-10": center && size !== "full",
+      "pt-7": !center && size !== "full",
+      "py-7": center && size !== "full",
       "justify-center": center,
     }),
 
@@ -20,6 +20,6 @@ export const styles = {
 
   childrenContainer: "h-full flex flex-col",
   title: "p-4",
-  body: "p-4 flex-1 overflow-y-auto overflow-clip",
+  body: "px-4 pb-2 flex-1 overflow-y-auto overflow-clip",
   footer: "px-4 py-2",
 };
