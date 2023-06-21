@@ -1,4 +1,4 @@
-export type Training = {
+export type ExternalTraining = {
   createdAt: Date;
   id: string;
   lspName: string;

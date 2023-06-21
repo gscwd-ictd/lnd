@@ -4,6 +4,7 @@ import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import axios from "axios";
 import { TrainingType } from "@lms/utilities/types/training-type.type";
+import { url } from "@lms/utilities/url/api-url";
 
 export const DeleteTrainingTypeModal = ({ id }: { id: string }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -15,7 +16,7 @@ export const DeleteTrainingTypeModal = ({ id }: { id: string }) => {
   } = useForm<TrainingType>();
 
   const onSubmit: SubmitHandler<TrainingType> = async () => {
-    const res = await axios.delete(`${process.env.NEXT_PUBLIC_DOMAIN_SERVER}/training-types/${id}`);
+    const res = await axios.delete(`${url}/training-types/${id}`);
     setIsOpen(false);
   };
 

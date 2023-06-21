@@ -12,6 +12,7 @@ import { url } from "@lms/utilities/url/api-url";
 //   data: TrainingType[];
 // };
 
+// export const TrainingTypeDataTable: FunctionComponent<TrainingTypeDataTableProps> = ({data}) => {
 export const TrainingTypeDataTable: FunctionComponent = () => {
   // const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();

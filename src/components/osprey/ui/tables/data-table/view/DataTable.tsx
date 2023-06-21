@@ -75,22 +75,22 @@ export const DataTable = <T extends unknown>({
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
 
   // initialize state for table data
-  const [data, setData] = useState<T[]>([]);
+  const [myData, setMyData] = useState<T[]>([]);
 
   // memoize table columns
   const tblCols = useMemo(() => columns, [columns]);
 
   // memoize table data
-  const tblData = useMemo(() => data, [data]);
+  const tblData = useMemo(() => myData, [myData]);
 
-  const getTableData = useQuery<Paginated<T>>({
+  const { status, data, error } = useQuery<Paginated<T>>({
     queryKey,
     queryFn: async () => {
       const { data } = await axios.get(datasource);
-      setData(data.items);
+      setMyData(data.items);
       return data;
     },
-    refetchInterval: 1000,
+    // refetchInterval: 1000,
   });
 
   const table = useReactTable({

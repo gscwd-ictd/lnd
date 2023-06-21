@@ -1,9 +1,9 @@
 import { Pagination } from "@lms/utilities/types/table-pagination.type";
-import { TrainingsDataTable } from "../TrainingsDataTable";
+import { TrainingsDataTable } from "../on-going/TrainingsDataTable";
 import axios from "axios";
 import { Training } from "@lms/utilities/types/training-external.type";
 import Link from "next/link";
-import { AddTrainingModal } from "../AddTrainingModal";
+import { AddTrainingModal } from "../on-going/AddTrainingModal";
 
 export const getData = async () => {
   const { data } = await axios.get(`${process.env.NEXT_PUBLIC_DOMAIN_SERVER}/trainings`);

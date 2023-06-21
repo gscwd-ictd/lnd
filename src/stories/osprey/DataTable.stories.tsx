@@ -306,7 +306,8 @@ export const WithAvatar: Story = {
     title: "DataTable",
     subtitle: "This is a sample of a data table with custom component as a row content.",
     columns: personColumnsWithAvatar,
-    data: personArray,
+    queryKey: [],
+    datasource: "",
   },
 };
 
@@ -318,7 +319,8 @@ export const WithoutAvatar: Story = {
     title: "DataTable",
     subtitle: "This is a sample of a data table without custom JSX content.",
     columns: personColumnsWithoutAvatar,
-    data: personArray,
+    datasource: "",
+    queryKey: [],
   },
 };
 
@@ -330,7 +332,8 @@ export const WithActionButtons: Story = {
     title: "DataTable",
     subtitle: "This is a sample of a data table with action buttons",
     columns: personColumnsWithActionButtons,
-    data: personArray,
+    datasource: "",
+    queryKey: [],
   },
 };
 
@@ -470,7 +473,8 @@ const DataTableWithSlider = () => {
         )}
       </SlideOver>
       <DataTable<Person>
-        data={personArray}
+        queryKey={[]}
+        datasource=""
         columns={personColumnsWithoutAvatar}
         title="DataTable"
         subtitle="Click on any of the row in the table to toggle slider and view details."
@@ -503,7 +507,8 @@ export const WithSlideOver: Story = {
  */
 export const WithRowSelection: Story = {
   args: {
-    data: personArray,
+    datasource: "",
+    queryKey: [],
     columns: personColumnsWithCheckbox,
     title: "DataTable",
     subtitle: "A data table component with row selection enabled.",
@@ -520,7 +525,8 @@ export const WithRowSelection: Story = {
  */
 export const WithEmptyData: Story = {
   args: {
-    data: [],
+    datasource: "",
+    queryKey: [],
     columns: personColumnsWithAvatar,
     title: "DataTable",
     subtitle: "A data table component with empty data",
