@@ -6,7 +6,7 @@ export const styles = {
   overlay: "fixed inset-0 bg-black/20 backdrop-blur-sm dark:bg-opacity-0",
   content: (size: ModalSize | undefined, center: boolean | undefined) =>
     cls("flex flex-col items-center w-full h-full", {
-      "pt-7": !center && size !== "full",
+      "py-5": !center && size !== "full",
       "py-7": center && size !== "full",
       "justify-center": center,
     }),

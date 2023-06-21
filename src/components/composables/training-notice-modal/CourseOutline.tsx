@@ -71,7 +71,7 @@ export const CourseOutline: FunctionComponent = () => {
           {courseContents?.map((item, index) => (
             <div
               key={index}
-              className="text-sm border-l-4 border-l-teal-400 border-y border-r rounded-r grid grid-cols-12"
+              className="text-sm border-l-4 border-l-rose-400 border-y border-r rounded-r grid grid-cols-12"
             >
               <div className="col-span-10 pl-4 py-2">
                 <h3 className="font-medium">{item.title}</h3>
@@ -123,6 +123,7 @@ export const CourseOutline: FunctionComponent = () => {
                           const newCourseContents = [...courseContents];
                           newCourseContents.splice(index, 1);
                           setCourseContents(newCourseContents);
+                          setCourseVal("");
                           courseInputRef?.current?.focus();
                         }}
                       >

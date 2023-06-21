@@ -1,10 +1,8 @@
 "use client";
 
 import { Button } from "@lms/components/osprey/ui/button/view/Button";
-import { Input } from "@lms/components/osprey/ui/input/view/Input";
 import { Modal, ModalContent, ModalTrigger } from "@lms/components/osprey/ui/overlays/modal/view/Modal";
 import { TrainingSource } from "@lms/lib/types/training-source.type";
-import { Paginated } from "@lms/utilities/types/pagination";
 import { url } from "@lms/utilities/url/api-url";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import axios from "axios";
@@ -12,6 +10,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import { FunctionComponent, useEffect, useState } from "react";
 import { TrainingInformation } from "./TrainingInformation";
 import { CourseOutline } from "./CourseOutline";
+import { ChooseTrainingType } from "./ChooseTrainingType";
+import { useTrainingNoticeStore } from "@lms/utilities/stores/training-notice-store";
 
 export const AddNewTrainingNoticeModal: FunctionComponent = () => {
   const [open, setOpen] = useState(false);
@@ -19,6 +19,8 @@ export const AddNewTrainingNoticeModal: FunctionComponent = () => {
   const [source, setSource] = useState<TrainingSource[]>([]);
   const [selectedSource, setSelectedSource] = useState<TrainingSource>();
   const [page, setPage] = useState(1);
+
+  const trainingType = useTrainingNoticeStore((state) => state.trainingType);
 
   useEffect(() => {
     const getTrainingSource = async () => {
@@ -85,27 +87,37 @@ export const AddNewTrainingNoticeModal: FunctionComponent = () => {
           <header className="pl-2">
             <p className="text-xs text-indigo-500 font-medium">{page} of 4</p>
             <div className="flex items-start gap-2">
-              <h3 className="text-lg font-semibold text-gray-600">Create Notice of Training</h3>
-              <p
-                className={`${
-                  selectedSource?.name === "Internal"
-                    ? "text-green-600 bg-green-50 border-green-100"
-                    : selectedSource?.name === "External"
-                    ? "text-amber-600 bg-amber-50 border-amber-100"
-                    : null
-                } text-xs px-[0.25rem] py-[0.1rem] font-semibold rounded border`}
-              >
-                {selectedSource?.name}
-              </p>
+              <h3 className="text-lg font-semibold text-gray-600">Notice of Training</h3>
+              <div className="flex items-center gap-1">
+                <p
+                  className={`${
+                    selectedSource?.name === "Internal"
+                      ? "text-green-600 bg-green-50 border-green-100"
+                      : selectedSource?.name === "External"
+                      ? "text-amber-600 bg-amber-50 border-amber-100"
+                      : null
+                  } text-xs px-[0.25rem] py-[0.1rem] font-semibold rounded border`}
+                >
+                  {selectedSource?.name}
+                </p>
+                {trainingType !== undefined && (
+                  <p
+                    className={`text-purple-600 bg-purple-50 border-purple-100 text-xs px-[0.25rem] py-[0.1rem] font-semibold rounded border`}
+                  >
+                    {trainingType.name}
+                  </p>
+                )}
+              </div>
             </div>
-            <p className="text-sm text-gray-400">Fill in training details</p>
+            <p className="text-sm text-gray-400">Fill in training details and course outline</p>
           </header>
         </ModalContent.Title>
 
         <ModalContent.Body>
           <main className="space-y-4 px-2">
-            {page === 1 && <TrainingInformation />}
-            {page === 2 && <CourseOutline />}
+            {page === 1 && <ChooseTrainingType />}
+            {page === 2 && <TrainingInformation />}
+            {page === 3 && <CourseOutline />}
           </main>
         </ModalContent.Body>
 
