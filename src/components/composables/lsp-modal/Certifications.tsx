@@ -1,49 +1,46 @@
 "use client";
 
-import { useLspDetailsStore } from "@lms/utilities/stores/lsp-details-store";
 import { FunctionComponent, MutableRefObject, useEffect, useRef, useState } from "react";
 import * as Tooltip from "@radix-ui/react-tooltip";
+import { useLspDetailsStore } from "@lms/utilities/stores/lsp-details-store";
 import { UndrawContractSvg } from "./UndrawContractSvg";
 
-type AffiliationMutation = {
+type CertificationMutation = {
   isShowing: boolean;
   type: null | "add" | "edit";
 };
 
-export const Affiliations: FunctionComponent = () => {
-  const affiliations = useLspDetailsStore((state) => state.affiliations);
-  const setAffiliations = useLspDetailsStore((state) => state.setAffiliations);
+export const Certifications: FunctionComponent = () => {
+  const certifications = useLspDetailsStore((state) => state.certifications);
+  const setCertifications = useLspDetailsStore((state) => state.setCertifications);
 
-  const [affiliationMutation, setaffiliationMutation] = useState<AffiliationMutation>({
+  const [certificationVal, setCertificationVal] = useState("");
+  const [certificationIndexToEdit, setCertificationIndexToEdit] = useState(-1);
+  const [certificationMutation, setCertificationMutation] = useState<CertificationMutation>({
     isShowing: false,
     type: null,
   });
-  const [positionVal, setPositionVal] = useState("");
-  const [institutionVal, setInstitutionVal] = useState("");
 
-  const [affiliationIndexToEdit, setAffiliationIndexToEdit] = useState(-1);
-
-  const positionInputRef = useRef(null) as unknown as MutableRefObject<HTMLInputElement>;
+  const certificationInputRef = useRef(null) as unknown as MutableRefObject<HTMLInputElement>;
 
   useEffect(() => {
-    if (affiliationMutation.isShowing) positionInputRef?.current?.focus();
-  }, [affiliationMutation.isShowing]);
+    if (certificationMutation.isShowing) certificationInputRef?.current?.focus();
+  }, [certificationMutation.isShowing]);
 
   return (
     <>
       <div className="w-full flex items-center justify-between">
-        <p className="text-xs font-medium text-gray-600">Affilations</p>
+        <p className="text-xs font-medium text-gray-600">Certifications</p>
         <Tooltip.Provider delayDuration={500}>
           <Tooltip.Root>
             <Tooltip.Trigger asChild>
               <button
-                onClick={() => {
-                  positionInputRef?.current?.focus();
-                  setaffiliationMutation({ isShowing: true, type: "add" });
-                  setPositionVal("");
-                  setInstitutionVal("");
-                }}
                 className="flex items-center justify-center h-5 w-5 hover:bg-gray-100 transition-colors rounded"
+                onClick={() => {
+                  setCertificationMutation({ isShowing: true, type: "add" });
+                  setCertificationVal("");
+                  certificationInputRef?.current?.focus();
+                }}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -59,14 +56,15 @@ export const Affiliations: FunctionComponent = () => {
               sideOffset={2}
               className="bg-zinc-800 z-50 text-xs text-white px-2 py-1 rounded font-medium"
             >
-              Add affiliation
+              Add certification
             </Tooltip.Content>
           </Tooltip.Root>
         </Tooltip.Provider>
       </div>
-      {affiliations.length === 0 ? (
+
+      {certifications.length === 0 ? (
         <div className="border-2 bg-gray-50/50 rounded-lg border-dashed w-full flex items-center justify-center">
-          <div className="py-7">
+          <div className="py-4">
             <div className="flex justify-center">
               <UndrawContractSvg />
             </div>
@@ -74,36 +72,32 @@ export const Affiliations: FunctionComponent = () => {
               role="button"
               className="text-gray-500"
               onClick={() => {
-                setaffiliationMutation({ isShowing: true, type: "add" });
-                positionInputRef?.current?.focus();
+                setCertificationMutation({ isShowing: true, type: "add" });
+                certificationInputRef?.current?.focus();
               }}
             >
-              Add affiliation details
+              Add certification details
             </h3>
           </div>
         </div>
       ) : (
         <ul className="space-y-2">
-          {affiliations.map((item, index) => (
+          {certifications.map((item, index) => (
             <div
               key={index}
-              className="text-sm border-l-4 border-l-teal-400 border-y border-r rounded-r grid grid-cols-12"
+              className="text-sm border-l-4 border-l-cyan-400 border-y border-r rounded-r grid grid-cols-12"
             >
-              <div className="col-span-10 pl-4 py-2">
-                <h3 className="font-medium">{item.position}</h3>
-                <p className="text-xs text-gray-500">{item.institution}</p>
-              </div>
+              <h3 className="col-span-10 pl-4 py-2">{item.name}</h3>
               <div className="col-span-2 py-2 text-center flex items-start justify-center gap-1">
                 <Tooltip.Provider delayDuration={500}>
                   <Tooltip.Root>
                     <Tooltip.Trigger asChild>
                       <button
                         onClick={() => {
-                          setAffiliationIndexToEdit(index);
-                          setaffiliationMutation({ isShowing: true, type: "edit" });
-                          setPositionVal(item.position);
-                          setInstitutionVal(item.institution);
-                          positionInputRef?.current?.focus();
+                          setCertificationMutation({ isShowing: true, type: "edit" });
+                          setCertificationVal(item.name);
+                          setCertificationIndexToEdit(index);
+                          certificationInputRef?.current?.focus();
                         }}
                       >
                         <svg
@@ -138,12 +132,11 @@ export const Affiliations: FunctionComponent = () => {
                     <Tooltip.Trigger asChild>
                       <button
                         onClick={() => {
-                          const newAffiliations = [...affiliations];
-                          newAffiliations.splice(index, 1);
-                          setAffiliations(newAffiliations);
-                          setaffiliationMutation({ isShowing: false, type: null });
-                          setPositionVal("");
-                          setInstitutionVal("");
+                          const newCertifications = [...certifications];
+                          newCertifications.splice(index, 1);
+                          setCertifications(newCertifications);
+                          setCertificationMutation({ isShowing: false, type: null });
+                          setCertificationVal("");
                         }}
                       >
                         <svg
@@ -175,75 +168,51 @@ export const Affiliations: FunctionComponent = () => {
           ))}
         </ul>
       )}
-      {affiliationMutation.isShowing && (
-        // this part should be form
-        <div className="">
-          <div className="flex items-center gap-2">
-            <div>
-              <label htmlFor="position" className="text-xs font-medium text-gray-600">
-                Position
-              </label>
-              <input
-                id="position"
-                value={positionVal}
-                ref={positionInputRef}
-                onChange={(e) => setPositionVal(e.target.value)}
-                type="text"
-                placeholder="Please specify the position"
-                className="py-2 px-3 placeholder:text-gray-300 block w-full border-gray-200 rounded text-xs focus:border-indigo-500 focus:ring-indigo-500"
-              />
-            </div>
 
-            <div>
-              <label htmlFor="aff-institution" className="text-xs font-medium text-gray-600">
-                Institution
-              </label>
-              <input
-                id="aff-institution"
-                value={institutionVal}
-                onChange={(e) => setInstitutionVal(e.target.value)}
-                type="text"
-                placeholder="Please specify the institution"
-                className="py-2 px-3 placeholder:text-gray-300 block w-full border-gray-200 rounded text-xs focus:border-indigo-500 focus:ring-indigo-500"
-              />
-            </div>
-          </div>
+      {certificationMutation.isShowing && (
+        <div>
+          <input
+            value={certificationVal}
+            onChange={(e) => setCertificationVal(e.target.value)}
+            ref={certificationInputRef}
+            type="text"
+            placeholder="Please specify certification name"
+            className="py-2 px-3 placeholder:text-gray-300 block w-full border-gray-200 rounded text-xs focus:border-indigo-500 focus:ring-indigo-500"
+          />
 
           <div className="flex items-center gap-1 mt-2">
             <button
+              disabled={certificationVal === ""}
               onClick={() => {
                 /**
-                 * Check if mutation type is edit
+                 * Check if type id edit
                  */
-                if (affiliationMutation.type === "edit") {
-                  // create a copy of education array
-                  const newAffiliations = [...affiliations];
+                if (certificationMutation.type === "edit") {
+                  // get a copy of the current expertise state
+                  const newCertifications = [...certifications];
 
-                  // set the updated value of the education details on the selected index
-                  newAffiliations[affiliationIndexToEdit] = { position: positionVal, institution: institutionVal };
+                  // update the value of the expertise based on what is typed by the user
+                  newCertifications[certificationIndexToEdit].name = certificationVal;
 
-                  // update the education array
-                  setAffiliations(newAffiliations);
+                  // set the new state for expertise
+                  setCertifications(newCertifications);
 
-                  // reset the index value
-                  setAffiliationIndexToEdit(-1);
+                  // reset the value of editExpertise value for index to update
+                  setCertificationIndexToEdit(-1);
 
                   /**
-                   * Check if mutation type is add
+                   * If type is add
                    */
-                } else if (affiliationMutation.type === "add") {
-                  // add the new education in the array
-                  setAffiliations([...affiliations, { position: positionVal, institution: institutionVal }]);
+                } else if (certificationMutation.type === "add") {
+                  // add the new expertise in the array
+                  setCertifications([...certifications, { name: certificationVal }]);
                 }
 
-                // reset the mutation values
-                setaffiliationMutation({ isShowing: false, type: null });
+                // reset the value of expertiseVal state
+                setCertificationVal("");
 
-                // reset value of degreeVal state
-                setPositionVal("");
-
-                // reset value of institutionVal state
-                setInstitutionVal("");
+                // reset the value of addExpertise state
+                setCertificationMutation({ isShowing: false, type: null });
               }}
               className="text-xs py-1 px-2 inline-flex justify-center items-center gap-2 rounded border border-transparent font-semibold bg-indigo-500 text-white hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all"
             >
@@ -251,7 +220,8 @@ export const Affiliations: FunctionComponent = () => {
             </button>
             <button
               onClick={() => {
-                setaffiliationMutation({ isShowing: false, type: null });
+                setCertificationMutation({ isShowing: false, type: null });
+                setCertificationVal("");
               }}
               className="text-xs py-1 px-2 inline-flex justify-center items-center gap-2 rounded-md border font-medium bg-white text-gray-700 shadow-sm align-middle hover:bg-gray-50 outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-indigo-600 transition-all"
             >

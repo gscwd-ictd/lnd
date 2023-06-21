@@ -93,7 +93,7 @@ const Title: FunctionComponent<Props> = ({ children }) => {
 };
 
 const Body: FunctionComponent<Props> = ({ children }) => {
-  return <main className="flex-1 overflow-y-auto">{children}</main>;
+  return <main className="flex-1 overflow-y-auto overflow-x-hidden">{children}</main>;
 };
 
 const Footer: FunctionComponent<FooterProps> = ({ children, alignEnd }) => {

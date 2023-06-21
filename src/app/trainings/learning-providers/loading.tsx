@@ -1,3 +1,3 @@
-export default function LearningProvidersLoading() {
+export default function LearningServiceProviderLoading() {
   return <>Loading...</>;
 }

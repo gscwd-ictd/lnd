@@ -14,6 +14,9 @@ export const PersonalInformation: FunctionComponent = () => {
   const lname = useLspDetailsStore((state) => state.lastName);
   const setLname = useLspDetailsStore((state) => state.setLastName);
 
+  const experience = useLspDetailsStore((state) => state.experience);
+  const setExperience = useLspDetailsStore((state) => state.setExperience);
+
   const intro = useLspDetailsStore((state) => state.introduction);
   const setIntro = useLspDetailsStore((state) => state.setIntroduction);
 
@@ -58,6 +61,19 @@ export const PersonalInformation: FunctionComponent = () => {
         />
       </div>
 
+      <div>
+        <label htmlFor="exp" className="text-xs font-medium text-gray-600">
+          Experience
+        </label>
+        <Input
+          id="exp"
+          value={Number(experience)}
+          onChange={(e) => setExperience(Number(e.target.value))}
+          size="small"
+          placeholder="Enter number of years"
+        />
+      </div>
+
       <div className="mt-1">
         <label htmlFor="intro" className="block text-xs font-medium text-gray-600 mb-1">
           Introduction
@@ -66,7 +82,7 @@ export const PersonalInformation: FunctionComponent = () => {
           id="intro"
           value={intro}
           onChange={(e) => setIntro(e.target.value)}
-          rows={4}
+          rows={2}
           placeholder="Please enter the LSP's preferred introduction here"
           className="w-full py-3 px-4 placeholder:text-gray-300 block border-gray-200 rounded-md text-sm focus:border-indigo-500 focus:ring-indigo-500"
         />

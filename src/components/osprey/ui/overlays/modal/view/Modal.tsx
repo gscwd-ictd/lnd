@@ -172,7 +172,7 @@ const modalContent = forwardRef<ElementRef<typeof Content>, ComponentPropsWithou
       animate: {
         opacity: 1,
         y: 0,
-        maxHeight: "90%",
+        maxHeight: "100%",
         width:
           size === "xs"
             ? "20rem"

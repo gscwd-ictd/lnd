@@ -1,42 +1,42 @@
 "use client";
 
-import * as Tooltip from "@radix-ui/react-tooltip";
-import { FunctionComponent, MutableRefObject, useEffect, useRef, useState } from "react";
-import { UndrawContractSvg } from "./UndrawContractSvg";
 import { useLspDetailsStore } from "@lms/utilities/stores/lsp-details-store";
+import { FunctionComponent, MutableRefObject, useEffect, useRef, useState } from "react";
+import * as Tooltip from "@radix-ui/react-tooltip";
+import { UndrawContractSvg } from "./UndrawContractSvg";
 
-type ExpertiseMutation = {
+type ProjectsMutation = {
   isShowing: boolean;
   type: null | "add" | "edit";
 };
 
-export const SubjectMatterExpertise: FunctionComponent = () => {
-  const expertise = useLspDetailsStore((state) => state.expertise);
-  const setExpertise = useLspDetailsStore((state) => state.setExpertise);
+export const ProjectsImplemented: FunctionComponent = () => {
+  const projects = useLspDetailsStore((state) => state.projects);
+  const setProjects = useLspDetailsStore((state) => state.setProjects);
 
-  const [expertiseVal, setExpertiseVal] = useState("");
-  const [expertiseIndexToEdit, setExpertiseIndexToEdit] = useState(-1);
-  const [expertiseMutation, setExpertiseMutation] = useState<ExpertiseMutation>({ isShowing: false, type: null });
+  const [projectsVal, setProjectsVal] = useState("");
+  const [projectIndexToEdit, setProjectIndexToEdit] = useState(-1);
+  const [projectsMutation, setProjectsMutation] = useState<ProjectsMutation>({ isShowing: false, type: null });
 
-  const expertiseInputRef = useRef(null) as unknown as MutableRefObject<HTMLInputElement>;
+  const projectInputRef = useRef(null) as unknown as MutableRefObject<HTMLInputElement>;
 
   useEffect(() => {
-    if (expertiseMutation.isShowing) expertiseInputRef?.current?.focus();
-  }, [expertiseMutation.isShowing]);
+    if (projectsMutation.isShowing) projectInputRef?.current?.focus();
+  }, [projectsMutation.isShowing]);
 
   return (
     <>
       <div className="w-full flex items-center justify-between">
-        <p className="text-xs font-medium text-gray-600">Area of expertise</p>
+        <p className="text-xs font-medium text-gray-600">Projects</p>
         <Tooltip.Provider delayDuration={500}>
           <Tooltip.Root>
             <Tooltip.Trigger asChild>
               <button
                 className="flex items-center justify-center h-5 w-5 hover:bg-gray-100 transition-colors rounded"
                 onClick={() => {
-                  setExpertiseMutation({ isShowing: true, type: "add" });
-                  setExpertiseVal("");
-                  expertiseInputRef?.current?.focus();
+                  setProjectsMutation({ isShowing: true, type: "add" });
+                  setProjectsVal("");
+                  projectInputRef?.current?.focus();
                 }}
               >
                 <svg
@@ -53,15 +53,15 @@ export const SubjectMatterExpertise: FunctionComponent = () => {
               sideOffset={2}
               className="bg-zinc-800 z-50 text-xs text-white px-2 py-1 rounded font-medium"
             >
-              Add expertise
+              Add project
             </Tooltip.Content>
           </Tooltip.Root>
         </Tooltip.Provider>
       </div>
 
-      {expertise.length === 0 ? (
+      {projects.length === 0 ? (
         <div className="border-2 bg-gray-50/50 rounded-lg border-dashed w-full flex items-center justify-center">
-          <div className="py-7">
+          <div className="py-4">
             <div className="flex justify-center">
               <UndrawContractSvg />
             </div>
@@ -69,32 +69,32 @@ export const SubjectMatterExpertise: FunctionComponent = () => {
               role="button"
               className="text-gray-500"
               onClick={() => {
-                setExpertiseMutation({ isShowing: true, type: "add" });
-                expertiseInputRef?.current?.focus();
+                setProjectsMutation({ isShowing: true, type: "add" });
+                projectInputRef?.current?.focus();
               }}
             >
-              Add area of expertise
+              Add project details
             </h3>
           </div>
         </div>
       ) : (
         <ul className="space-y-2">
-          {expertise.map((item, index) => (
+          {projects.map((item, index) => (
             <div
               key={index}
-              className="text-sm border-l-4 border-l-blue-400 border-y border-r rounded-r grid grid-cols-12"
+              className="text-sm border-l-4 border-l-purple-400 border-y border-r rounded-r grid grid-cols-12"
             >
-              <h3 className="col-span-10 pl-4 py-2">{item.subjectMatter}</h3>
+              <h3 className="col-span-10 pl-4 py-2">{item.name}</h3>
               <div className="col-span-2 py-2 text-center flex items-start justify-center gap-1">
                 <Tooltip.Provider delayDuration={500}>
                   <Tooltip.Root>
                     <Tooltip.Trigger asChild>
                       <button
                         onClick={() => {
-                          setExpertiseMutation({ isShowing: true, type: "edit" });
-                          setExpertiseVal(item.subjectMatter);
-                          setExpertiseIndexToEdit(index);
-                          expertiseInputRef?.current?.focus();
+                          setProjectsMutation({ isShowing: true, type: "edit" });
+                          setProjectsVal(item.name);
+                          setProjectIndexToEdit(index);
+                          projectInputRef?.current?.focus();
                         }}
                       >
                         <svg
@@ -129,11 +129,11 @@ export const SubjectMatterExpertise: FunctionComponent = () => {
                     <Tooltip.Trigger asChild>
                       <button
                         onClick={() => {
-                          const newExpertise = [...expertise];
-                          newExpertise.splice(index, 1);
-                          setExpertise(newExpertise);
-                          setExpertiseMutation({ isShowing: false, type: null });
-                          setExpertiseVal("");
+                          const newProjects = [...projects];
+                          newProjects.splice(index, 1);
+                          setProjects(newProjects);
+                          setProjectsMutation({ isShowing: false, type: null });
+                          setProjectsVal("");
                         }}
                       >
                         <svg
@@ -166,50 +166,50 @@ export const SubjectMatterExpertise: FunctionComponent = () => {
         </ul>
       )}
 
-      {expertiseMutation.isShowing && (
+      {projectsMutation.isShowing && (
         <div>
           <input
-            value={expertiseVal}
-            onChange={(e) => setExpertiseVal(e.target.value)}
-            ref={expertiseInputRef}
+            value={projectsVal}
+            onChange={(e) => setProjectsVal(e.target.value)}
+            ref={projectInputRef}
             type="text"
-            placeholder="Please specify subject matter expertise"
+            placeholder="Please specify the project name"
             className="py-2 px-3 placeholder:text-gray-300 block w-full border-gray-200 rounded text-xs focus:border-indigo-500 focus:ring-indigo-500"
           />
 
           <div className="flex items-center gap-1 mt-2">
             <button
-              disabled={expertiseVal === ""}
+              disabled={projectsVal === ""}
               onClick={() => {
                 /**
                  * Check if type id edit
                  */
-                if (expertiseMutation.type === "edit") {
+                if (projectsMutation.type === "edit") {
                   // get a copy of the current expertise state
-                  const newExpertise = [...expertise];
+                  const newProjects = [...projects];
 
                   // update the value of the expertise based on what is typed by the user
-                  newExpertise[expertiseIndexToEdit].subjectMatter = expertiseVal;
+                  newProjects[projectIndexToEdit].name = projectsVal;
 
                   // set the new state for expertise
-                  setExpertise(newExpertise);
+                  setProjects(newProjects);
 
                   // reset the value of editExpertise value for index to update
-                  setExpertiseIndexToEdit(-1);
+                  setProjectIndexToEdit(-1);
 
                   /**
                    * If type is add
                    */
-                } else if (expertiseMutation.type === "add") {
+                } else if (projectsMutation.type === "add") {
                   // add the new expertise in the array
-                  setExpertise([...expertise, { subjectMatter: expertiseVal }]);
+                  setProjects([...projects, { name: projectsVal }]);
                 }
 
                 // reset the value of expertiseVal state
-                setExpertiseVal("");
+                setProjectsVal("");
 
                 // reset the value of addExpertise state
-                setExpertiseMutation({ isShowing: false, type: null });
+                setProjectsMutation({ isShowing: false, type: null });
               }}
               className="text-xs py-1 px-2 inline-flex justify-center items-center gap-2 rounded border border-transparent font-semibold bg-indigo-500 text-white hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all"
             >
@@ -217,8 +217,8 @@ export const SubjectMatterExpertise: FunctionComponent = () => {
             </button>
             <button
               onClick={() => {
-                setExpertiseMutation({ isShowing: false, type: null });
-                setExpertiseVal("");
+                setProjectsMutation({ isShowing: false, type: null });
+                setProjectsVal("");
               }}
               className="text-xs py-1 px-2 inline-flex justify-center items-center gap-2 rounded-md border font-medium bg-white text-gray-700 shadow-sm align-middle hover:bg-gray-50 outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-indigo-600 transition-all"
             >

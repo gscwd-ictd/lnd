@@ -2,10 +2,13 @@
 
 import { DataTable } from "@lms/components/osprey/ui/tables/data-table/view/DataTable";
 import { createColumnHelper } from "@tanstack/react-table";
-import { FunctionComponent } from "react";
+import { FunctionComponent, useState } from "react";
 import { url } from "@lms/utilities/url/api-url";
 import { LearningServiceProvider } from "@lms/utilities/types/lsp";
 import * as Tooltip from "@radix-ui/react-tooltip";
+import { SlideOver } from "@lms/components/osprey/ui/overlays/slider-over/view/SliderOver";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 
 const helper = createColumnHelper<LearningServiceProvider>();
 
@@ -106,14 +109,34 @@ const columns = [
 ];
 
 export const LspDataTable: FunctionComponent = () => {
+  const [open, setOpen] = useState(false);
+  const [lspId, setLspId] = useState<string>("");
+
+  const { data } = useQuery({
+    queryKey: ["lsp-details", lspId],
+    queryFn: async () => {
+      const { data } = await axios.get(`${url}/lsp-details/${lspId}`);
+      return data;
+    },
+  });
+
   return (
-    <DataTable<LearningServiceProvider>
-      datasource={`${url}/lsp-details?page=1&limit=40`}
-      queryKey={["lsp"]}
-      columns={columns}
-      title="Learning Service Providers"
-      subtitle="Select any of the learning service providers below to view details."
-      onRowClick={() => console.log("row is clicked")}
-    />
+    <>
+      <SlideOver open={open} setOpen={setOpen}>
+        <SlideOver.Title>Title</SlideOver.Title>
+        <SlideOver.Body>{data && JSON.stringify(data)}</SlideOver.Body>
+      </SlideOver>
+      <DataTable<LearningServiceProvider>
+        datasource={`${url}/lsp-details?page=1&limit=40`}
+        queryKey={["lsp"]}
+        columns={columns}
+        title="Learning Service Providers"
+        subtitle="Select any of the learning service providers below to view details."
+        onRowClick={(row) => {
+          setOpen(true);
+          setLspId(row.original.id);
+        }}
+      />
+    </>
   );
 };

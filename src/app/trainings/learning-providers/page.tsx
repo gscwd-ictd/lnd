@@ -1,9 +1,8 @@
-import { LspDataTable } from "./LspDataTable";
-import { AddNewLspModal } from "./AddNewLspModal";
+import { LspDataTable } from "../../../components/composables/lsp-data-table/LspDataTable";
+import { AddNewLspModal } from "../../../components/composables/lsp-modal/AddNewLspModal";
 import Link from "next/link";
 
 export default async function LearningProviders() {
-  // const result = await getData();
   return (
     <div className="p-5">
       <div className="flex items-center justify-between mb-3">
