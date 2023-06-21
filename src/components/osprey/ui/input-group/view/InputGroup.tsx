@@ -1,31 +1,22 @@
-export const InputGroup = () => {
-  return (
-    <div className="flex rounded-md shadow-sm">
-      <input
-        type="text"
-        id="hs-trailing-button-add-on"
-        name="hs-trailing-button-add-on"
-        className="py-3 px-4 block w-full border-gray-200 shadow-sm rounded-l-md text-sm"
-      />
-      <button
-        type="button"
-        className="py-3 px-4 inline-flex flex-shrink-0 justify-center items-center gap-2 rounded-r-md border border-transparent font-semibold bg-blue-500 text-white hover:bg-blue-600 focus:z-10 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all text-sm"
-      >
-        Add
-      </button>
-    </div>
-  );
-};
+import { forwardRef } from "react";
+import { InputGroupProps } from "../utils/props";
+import { styles } from "../utils/styles";
+import { start } from "repl";
+
+export const InputGroup = forwardRef<HTMLInputElement, InputGroupProps>(
+  ({ size = "default", startIcon, children, ...props }, forwardedRef) => {
+    return (
+      <div className={`${startIcon ? "relative " : ""} flex rounded-md shadow-sm`}>
+        <input type="text" {...props} ref={forwardedRef} className={styles.input(startIcon, size)} />
+        {startIcon !== undefined && (
+          <div className="absolute inset-y-0 left-0 flex items-center pointer-events-none z-20 pl-4">{startIcon}</div>
+        )}
+        <button type="button" className={styles.button(size)}>
+          {children}
+        </button>
+      </div>
+    );
+  }
+);
 
 InputGroup.displayName = "InputGroup";
-
-//     return (<div>
-//         <label>Label</label>
-//         <div className="flex rounded-md shadow-sm">
-//           <input ref={forwardedRef} type="text" id="hs-trailing-button-add-on" name="hs-trailing-button-add-on" className="py-3 px-4 block w-full border-gray-200 shadow-sm rounded-l-md text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400"/>
-//           <button type="button" className="py-3 px-4 inline-flex flex-shrink-0 justify-center items-center gap-2 rounded-r-md border border-transparent font-semibold bg-blue-500 text-white hover:bg-blue-600 focus:z-10 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all text-sm">
-//             Button
-//           </button>
-//         </div>
-//       </div>);
-// }
