@@ -2,44 +2,42 @@
 
 import { FunctionComponent, MutableRefObject, useEffect, useRef, useState } from "react";
 import * as Tooltip from "@radix-ui/react-tooltip";
-import { UndrawContractSvg } from "./UndrawContractSvg";
 import { useLspDetailsStore } from "@lms/utilities/stores/lsp-details-store";
+import { UndrawContractSvg } from "../UndrawContractSvg";
 
-type EducationMutation = {
+type TrainingMutation = {
   isShowing: boolean;
   type: null | "add" | "edit";
 };
 
-export const EducationDetails: FunctionComponent = () => {
-  const education = useLspDetailsStore((state) => state.education);
-  const setEducation = useLspDetailsStore((state) => state.setEducation);
+export const TrainingDetails: FunctionComponent = () => {
+  const trainingDetails = useLspDetailsStore((state) => state.trainings);
+  const setTrainingDetails = useLspDetailsStore((state) => state.setTrainings);
 
-  const [educationMutation, setEducationMutation] = useState<EducationMutation>({ isShowing: false, type: null });
-  const [degreeVal, setDegreeVal] = useState("");
-  const [institutionVal, setInstitutionVal] = useState("");
-  const [educationIndexToEdit, setEducationIndexToEdit] = useState(-1);
+  const [trainingVal, setTrainingVal] = useState("");
+  const [trainingIndexToEdit, setTrainingIndexToEdit] = useState(-1);
+  const [trainingMutation, setTrainingMutation] = useState<TrainingMutation>({ isShowing: false, type: null });
 
-  const degreeInputRef = useRef(null) as unknown as MutableRefObject<HTMLInputElement>;
+  const trainingInputRef = useRef(null) as unknown as MutableRefObject<HTMLInputElement>;
 
   useEffect(() => {
-    if (educationMutation.isShowing) degreeInputRef?.current?.focus();
-  }, [educationMutation.isShowing]);
+    if (trainingMutation.isShowing) trainingInputRef?.current?.focus();
+  }, [trainingMutation.isShowing]);
 
   return (
     <>
       <div className="w-full flex items-center justify-between">
-        <p className="text-xs font-medium text-gray-600">Education</p>
+        <p className="text-xs font-medium text-gray-600">Trainings</p>
         <Tooltip.Provider delayDuration={500}>
           <Tooltip.Root>
             <Tooltip.Trigger asChild>
               <button
-                onClick={() => {
-                  degreeInputRef?.current?.focus();
-                  setEducationMutation({ isShowing: true, type: "add" });
-                  setDegreeVal("");
-                  setInstitutionVal("");
-                }}
                 className="flex items-center justify-center h-5 w-5 hover:bg-gray-100 transition-colors rounded"
+                onClick={() => {
+                  setTrainingMutation({ isShowing: true, type: "add" });
+                  setTrainingVal("");
+                  trainingInputRef?.current?.focus();
+                }}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -55,12 +53,13 @@ export const EducationDetails: FunctionComponent = () => {
               sideOffset={2}
               className="bg-zinc-800 z-50 text-xs text-white px-2 py-1 rounded font-medium"
             >
-              Add education details
+              Add training
             </Tooltip.Content>
           </Tooltip.Root>
         </Tooltip.Provider>
       </div>
-      {education.length === 0 ? (
+
+      {trainingDetails.length === 0 ? (
         <div className="border-2 bg-gray-50/50 rounded-lg border-dashed w-full flex items-center justify-center">
           <div className="py-4">
             <div className="flex justify-center">
@@ -70,36 +69,32 @@ export const EducationDetails: FunctionComponent = () => {
               role="button"
               className="text-gray-500"
               onClick={() => {
-                setEducationMutation({ isShowing: true, type: "add" });
-                degreeInputRef?.current?.focus();
+                setTrainingMutation({ isShowing: true, type: "add" });
+                trainingInputRef?.current?.focus();
               }}
             >
-              Add education details
+              Add training details
             </h3>
           </div>
         </div>
       ) : (
         <ul className="space-y-2">
-          {education.map((item, index) => (
+          {trainingDetails.map((item, index) => (
             <div
               key={index}
-              className="text-sm border-l-4 border-l-rose-400 border-y border-r rounded-r grid grid-cols-12"
+              className="text-sm border-l-4 border-l-amber-400 border-y border-r rounded-r grid grid-cols-12"
             >
-              <div className="col-span-10 pl-4 py-2">
-                <h3 className="font-medium">{item.degree}</h3>
-                <p className="text-xs text-gray-500">{item.institution}</p>
-              </div>
+              <h3 className="col-span-10 pl-4 py-2">{item.name}</h3>
               <div className="col-span-2 py-2 text-center flex items-start justify-center gap-1">
                 <Tooltip.Provider delayDuration={500}>
                   <Tooltip.Root>
                     <Tooltip.Trigger asChild>
                       <button
                         onClick={() => {
-                          setEducationIndexToEdit(index);
-                          setEducationMutation({ isShowing: true, type: "edit" });
-                          setDegreeVal(item.degree);
-                          setInstitutionVal(item.institution);
-                          degreeInputRef?.current?.focus();
+                          setTrainingMutation({ isShowing: true, type: "edit" });
+                          setTrainingVal(item.name);
+                          setTrainingIndexToEdit(index);
+                          trainingInputRef?.current?.focus();
                         }}
                       >
                         <svg
@@ -134,12 +129,11 @@ export const EducationDetails: FunctionComponent = () => {
                     <Tooltip.Trigger asChild>
                       <button
                         onClick={() => {
-                          const newEducation = [...education];
-                          newEducation.splice(index, 1);
-                          setEducation(newEducation);
-                          setEducationMutation({ isShowing: false, type: null });
-                          setDegreeVal("");
-                          setInstitutionVal("");
+                          const newTrainingDetails = [...trainingDetails];
+                          newTrainingDetails.splice(index, 1);
+                          setTrainingDetails(newTrainingDetails);
+                          setTrainingMutation({ isShowing: false, type: null });
+                          setTrainingVal("");
                         }}
                       >
                         <svg
@@ -171,75 +165,51 @@ export const EducationDetails: FunctionComponent = () => {
           ))}
         </ul>
       )}
-      {educationMutation.isShowing && (
-        // this part should be form
-        <div className="">
-          <div className="flex items-center gap-2">
-            <div>
-              <label htmlFor="degree" className="text-xs font-medium text-gray-600">
-                Degree
-              </label>
-              <input
-                id="degree"
-                value={degreeVal}
-                ref={degreeInputRef}
-                onChange={(e) => setDegreeVal(e.target.value)}
-                type="text"
-                placeholder="Please specify the degree"
-                className="py-2 px-3 placeholder:text-gray-300 block w-full border-gray-200 rounded text-xs focus:border-indigo-500 focus:ring-indigo-500"
-              />
-            </div>
 
-            <div>
-              <label htmlFor="institution" className="text-xs font-medium text-gray-600">
-                Institution
-              </label>
-              <input
-                id="institution"
-                value={institutionVal}
-                onChange={(e) => setInstitutionVal(e.target.value)}
-                type="text"
-                placeholder="Please specify the institution"
-                className="py-2 px-3 placeholder:text-gray-300 block w-full border-gray-200 rounded text-xs focus:border-indigo-500 focus:ring-indigo-500"
-              />
-            </div>
-          </div>
+      {trainingMutation.isShowing && (
+        <div>
+          <input
+            value={trainingVal}
+            onChange={(e) => setTrainingVal(e.target.value)}
+            ref={trainingInputRef}
+            type="text"
+            placeholder="Please enter training details"
+            className="py-2 px-3 placeholder:text-gray-300 block w-full border-gray-200 rounded text-xs focus:border-indigo-500 focus:ring-indigo-500"
+          />
 
           <div className="flex items-center gap-1 mt-2">
             <button
+              disabled={trainingVal === ""}
               onClick={() => {
                 /**
-                 * Check if mutation type is edit
+                 * Check if type id edit
                  */
-                if (educationMutation.type === "edit") {
-                  // create a copy of education array
-                  const newEducation = [...education];
+                if (trainingMutation.type === "edit") {
+                  // get a copy of the current expertise state
+                  const newTrainingDetails = [...trainingDetails];
 
-                  // set the updated value of the education details on the selected index
-                  newEducation[educationIndexToEdit] = { degree: degreeVal, institution: institutionVal };
+                  // update the value of the expertise based on what is typed by the user
+                  newTrainingDetails[trainingIndexToEdit].name = trainingVal;
 
-                  // update the education array
-                  setEducation(newEducation);
+                  // set the new state for expertise
+                  setTrainingDetails(newTrainingDetails);
 
-                  // reset the index value
-                  setEducationIndexToEdit(-1);
+                  // reset the value of editExpertise value for index to update
+                  setTrainingIndexToEdit(-1);
 
                   /**
-                   * Check if mutation type is add
+                   * If type is add
                    */
-                } else if (educationMutation.type === "add") {
-                  // add the new education in the array
-                  setEducation([...education, { degree: degreeVal, institution: institutionVal }]);
+                } else if (trainingMutation.type === "add") {
+                  // add the new expertise in the array
+                  setTrainingDetails([...trainingDetails, { name: trainingVal }]);
                 }
 
-                // reset the mutation values
-                setEducationMutation({ isShowing: false, type: null });
+                // reset the value of expertiseVal state
+                setTrainingVal("");
 
-                // reset value of degreeVal state
-                setDegreeVal("");
-
-                // reset value of institutionVal state
-                setInstitutionVal("");
+                // reset the value of addExpertise state
+                setTrainingMutation({ isShowing: false, type: null });
               }}
               className="text-xs py-1 px-2 inline-flex justify-center items-center gap-2 rounded border border-transparent font-semibold bg-indigo-500 text-white hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all"
             >
@@ -247,7 +217,8 @@ export const EducationDetails: FunctionComponent = () => {
             </button>
             <button
               onClick={() => {
-                setEducationMutation({ isShowing: false, type: null });
+                setTrainingMutation({ isShowing: false, type: null });
+                setTrainingVal("");
               }}
               className="text-xs py-1 px-2 inline-flex justify-center items-center gap-2 rounded-md border font-medium bg-white text-gray-700 shadow-sm align-middle hover:bg-gray-50 outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-indigo-600 transition-all"
             >

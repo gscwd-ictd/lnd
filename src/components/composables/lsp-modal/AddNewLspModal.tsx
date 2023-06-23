@@ -4,45 +4,42 @@ import { Avatar } from "@lms/components/osprey/ui/avatar/view/Avatar";
 import { Button } from "@lms/components/osprey/ui/button/view/Button";
 import { Modal, ModalContent, ModalTrigger } from "@lms/components/osprey/ui/overlays/modal/view/Modal";
 import { FunctionComponent, useEffect, useState } from "react";
-import { PersonalInformation } from "./PersonalInformation";
-import { ContactInformation } from "./ContactInformation";
-import { SubjectMatterExpertise } from "./SubjectMatterExpertise";
-import { EducationDetails } from "./EducationDetails";
-import { TrainingDetails } from "./TrainingDetails";
-import { ProjectsImplemented } from "./ProjectsImplemented";
-import { CoachingExperience } from "./CoachingExperience";
-import { Affiliations } from "./Affiliations";
-import { AwardsAndRecognitions } from "./AwardsAndRecognitions";
-import { Certifications } from "./Certifications";
-import { LspDetailsSummary } from "./LspDetailsSummary";
+
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { AnimatePresence, motion } from "framer-motion";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import { useLspDetailsStore } from "@lms/utilities/stores/lsp-details-store";
+import {
+  useAddLspModalStore,
+  useLspDetailsStore,
+  useLspTypeStore,
+  useSelectedLspSource,
+} from "@lms/utilities/stores/lsp-details-store";
 import { url } from "@lms/utilities/url/api-url";
+import { ChooseLspSource } from "./ChooseLspSource";
+import { Affiliations } from "./individual/Affiliations";
+import { AwardsAndRecognitions } from "./individual/AwardsAndRecognitions";
+import { Certifications } from "./individual/Certifications";
+import { CoachingExperience } from "./individual/CoachingExperience";
+import { ContactInformation } from "./individual/ContactInformation";
+import { EducationDetails } from "./individual/EducationDetails";
+import { LspDetailsSummary } from "./individual/LspDetailsSummary";
+import { PersonalInformation } from "./individual/PersonalInformation";
+import { ProjectsImplemented } from "./individual/ProjectsImplemented";
+import { SubjectMatterExpertise } from "./individual/SubjectMatterExpertise";
+import { TrainingDetails } from "./individual/TrainingDetails";
 
 export const AddNewLspModal: FunctionComponent = () => {
   const [open, setOpen] = useState(false);
-  const [page, setPage] = useState(1);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [source, setSource] = useState<"Internal" | "External" | undefined>();
 
-  const trainingSourceId = useLspDetailsStore((state) => state.trainingSource);
-  const setTrainingSource = useLspDetailsStore((state) => state.setTrainingSource);
+  const { page, setPage } = useAddLspModalStore();
+  const selectedLspSource = useSelectedLspSource((state) => state.selectedLspSource);
+
+  const lspType = useLspTypeStore((state) => state.lspType);
+  const setLspType = useLspTypeStore((state) => state.setLspType);
 
   const queryClient = useQueryClient();
-
-  useEffect(() => {
-    const getTrainingSource = async () => {
-      const { data } = await axios.get(`${url}/training-sources/q?source=${source}`);
-
-      setTrainingSource(data.id);
-    };
-    if (source !== undefined) getTrainingSource();
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [source]);
 
   const {
     employeeId,
@@ -53,7 +50,7 @@ export const AddNewLspModal: FunctionComponent = () => {
     email,
     postalAddress,
     experience,
-    trainingSource,
+    lspSource,
     photoUrl,
     expertise,
     affiliations,
@@ -81,7 +78,7 @@ export const AddNewLspModal: FunctionComponent = () => {
         email,
         postalAddress,
         experience,
-        trainingSource: trainingSourceId,
+        lspSource: selectedLspSource?.id,
         photoUrl,
         expertise,
         affiliations,
@@ -129,16 +126,22 @@ export const AddNewLspModal: FunctionComponent = () => {
                     className="px-2 py-1 outline-none hover:bg-gray-100 border-b border-b-100 focus:bg-gray-100 transition-colors"
                     asChild
                   >
-                    <ModalTrigger className="text-xs text-gray-600 font-medium" onClick={() => setSource("Internal")}>
-                      Internal
+                    <ModalTrigger
+                      className="text-left text-xs text-gray-600 font-medium"
+                      onClick={() => setLspType({ name: "Individual" })}
+                    >
+                      Individual
                     </ModalTrigger>
                   </DropdownMenu.Item>
                   <DropdownMenu.Item
                     asChild
                     className="px-2 py-1 outline-none hover:bg-gray-100 focus:bg-gray-100 transition-colors"
                   >
-                    <ModalTrigger className="text-xs text-gray-600 font-medium" onClick={() => setSource("External")}>
-                      External
+                    <ModalTrigger
+                      className="text-left text-xs text-gray-600 font-medium"
+                      onClick={() => setLspType({ name: "Organization" })}
+                    >
+                      Organization
                     </ModalTrigger>
                   </DropdownMenu.Item>
                 </motion.div>
@@ -158,59 +161,71 @@ export const AddNewLspModal: FunctionComponent = () => {
           <header className="mt-1 px-2">
             <p className="text-xs text-indigo-500 font-medium">{page} of 10</p>
             <div className="flex items-start gap-2">
-              <h3 className="text-lg font-semibold text-gray-600">Subject Matter Expert Profile</h3>
-              <p
-                className={`${
-                  source === "Internal"
-                    ? "text-green-600 bg-green-50 border-green-100"
-                    : source === "External"
-                    ? "text-amber-600 bg-amber-50 border-amber-100"
-                    : null
-                } text-xs px-[0.25rem] py-[0.1rem] font-semibold rounded border`}
-              >
-                {source}
-              </p>
+              <h3 className="text-lg font-semibold text-gray-600">Learning Provider Profile</h3>
+              <div className="flex items-center gap-1">
+                <p
+                  className={`${
+                    lspType?.name === "Individual"
+                      ? "text-green-600 bg-green-50 border-green-100"
+                      : lspType?.name === "Organization"
+                      ? "text-amber-600 bg-amber-50 border-amber-100"
+                      : null
+                  } text-xs px-[0.25rem] py-[0.1rem] font-semibold rounded border`}
+                >
+                  {lspType?.name}
+                </p>
+                {selectedLspSource && (
+                  <p
+                    className={`text-purple-600 bg-purple-50 border-purple-100 text-xs px-[0.25rem] py-[0.1rem] font-semibold rounded border`}
+                  >
+                    {selectedLspSource.name}
+                  </p>
+                )}
+              </div>
             </div>
             <p className="text-sm text-gray-400">
-              {page === 1
+              {page === 2
                 ? "Personal information"
-                : page === 2
-                ? "Contact information"
                 : page === 3
-                ? "Subject-matter expertise"
+                ? "Contact information"
                 : page === 4
-                ? "Educational attainment"
+                ? "Subject-matter expertise"
                 : page === 5
-                ? "Related trainings conducted for the past 5 years"
+                ? "Educational attainment"
                 : page === 6
-                ? "Related projects implemented for the past 5 years"
+                ? "Related trainings conducted for the past 5 years"
                 : page === 7
-                ? "Related coaching experience for the past 5 years"
+                ? "Related projects implemented for the past 5 years"
                 : page === 8
-                ? "Learning Service Provider's affiliations"
+                ? "Related coaching experience for the past 5 years"
                 : page === 9
+                ? "Learning Service Provider's affiliations"
+                : page === 10
                 ? "Learning Service Provider's awards & recognitions"
-                : "Learning Service Provider's certifications"}
+                : page === 11
+                ? "Learning Service Provider's certifications"
+                : ""}
             </p>
           </header>
         </ModalContent.Title>
         <ModalContent.Body>
-          {source === "External" ? (
+          {lspType?.name === "Individual" ? (
             <main className="px-2 space-y-2">
-              {page === 1 && <PersonalInformation />}
-              {page === 2 && <ContactInformation />}
-              {page === 3 && <SubjectMatterExpertise />}
-              {page === 4 && <EducationDetails />}
-              {page === 5 && <TrainingDetails />}
-              {page === 6 && <ProjectsImplemented />}
-              {page === 7 && <CoachingExperience />}
-              {page === 8 && <Affiliations />}
-              {page === 9 && <AwardsAndRecognitions />}
-              {page === 10 && <Certifications />}
-              {page === 11 && <LspDetailsSummary />}
+              {page === 1 && <ChooseLspSource />}
+              {page === 2 && <PersonalInformation />}
+              {page === 3 && <ContactInformation />}
+              {page === 4 && <SubjectMatterExpertise />}
+              {page === 5 && <EducationDetails />}
+              {page === 6 && <TrainingDetails />}
+              {page === 7 && <ProjectsImplemented />}
+              {page === 8 && <CoachingExperience />}
+              {page === 9 && <Affiliations />}
+              {page === 10 && <AwardsAndRecognitions />}
+              {page === 11 && <Certifications />}
+              {page === 12 && <LspDetailsSummary />}
             </main>
-          ) : source === "Internal" ? (
-            <>Get data from HRMS</>
+          ) : lspType?.name === "Organization" ? (
+            <>Fill in org data</>
           ) : null}
         </ModalContent.Body>
         <ModalContent.Footer>
@@ -228,10 +243,10 @@ export const AddNewLspModal: FunctionComponent = () => {
               <Button
                 size="small"
                 onClick={() => {
-                  page === 11 ? lspDataTableMutation.mutate() : setPage(page + 1);
+                  page === 13 ? lspDataTableMutation.mutate() : setPage(page + 1);
                 }}
               >
-                {page === 11 ? "Confirm" : "Proceed"}
+                {page === 13 ? "Confirm" : "Proceed"}
               </Button>
             </div>
           </div>

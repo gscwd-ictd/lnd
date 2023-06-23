@@ -11,7 +11,7 @@ export const LspDetailsSummary: FunctionComponent = () => {
     email,
     postalAddress,
     experience,
-    trainingSource,
+    lspSource,
     photoUrl,
     expertise,
     affiliations,
@@ -32,7 +32,7 @@ export const LspDetailsSummary: FunctionComponent = () => {
       <p>{contactNumber}</p>
       <p>{email}</p>
       <p>{postalAddress}</p>
-      <p>{trainingSource}</p>
+      <p>{lspSource}</p>
       <p>{photoUrl}</p>
       <p>{experience}</p>
       <ul>

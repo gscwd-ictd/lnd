@@ -1,42 +1,42 @@
 "use client";
 
-import { useLspDetailsStore } from "@lms/utilities/stores/lsp-details-store";
-import { FunctionComponent, MutableRefObject, useEffect, useRef, useState } from "react";
 import * as Tooltip from "@radix-ui/react-tooltip";
-import { UndrawContractSvg } from "./UndrawContractSvg";
+import { FunctionComponent, MutableRefObject, useEffect, useRef, useState } from "react";
+import { useLspDetailsStore } from "@lms/utilities/stores/lsp-details-store";
+import { UndrawContractSvg } from "../UndrawContractSvg";
 
-type CoachingMutation = {
+type ExpertiseMutation = {
   isShowing: boolean;
   type: null | "add" | "edit";
 };
 
-export const CoachingExperience: FunctionComponent = () => {
-  const coaching = useLspDetailsStore((state) => state.coaching);
-  const setCoaching = useLspDetailsStore((state) => state.setCoaching);
+export const SubjectMatterExpertise: FunctionComponent = () => {
+  const expertise = useLspDetailsStore((state) => state.expertise);
+  const setExpertise = useLspDetailsStore((state) => state.setExpertise);
 
-  const [coachingVal, setCoachingVal] = useState("");
-  const [coachingIndexToEdit, setCoachingIndexToEdit] = useState(-1);
-  const [coachingMutation, setCoachingMutation] = useState<CoachingMutation>({ isShowing: false, type: null });
+  const [expertiseVal, setExpertiseVal] = useState("");
+  const [expertiseIndexToEdit, setExpertiseIndexToEdit] = useState(-1);
+  const [expertiseMutation, setExpertiseMutation] = useState<ExpertiseMutation>({ isShowing: false, type: null });
 
-  const coachingtInputRef = useRef(null) as unknown as MutableRefObject<HTMLInputElement>;
+  const expertiseInputRef = useRef(null) as unknown as MutableRefObject<HTMLInputElement>;
 
   useEffect(() => {
-    if (coachingMutation.isShowing) coachingtInputRef?.current?.focus();
-  }, [coachingMutation.isShowing]);
+    if (expertiseMutation.isShowing) expertiseInputRef?.current?.focus();
+  }, [expertiseMutation.isShowing]);
 
   return (
     <>
       <div className="w-full flex items-center justify-between">
-        <p className="text-xs font-medium text-gray-600">Coaching experience</p>
+        <p className="text-xs font-medium text-gray-600">Area of expertise</p>
         <Tooltip.Provider delayDuration={500}>
           <Tooltip.Root>
             <Tooltip.Trigger asChild>
               <button
                 className="flex items-center justify-center h-5 w-5 hover:bg-gray-100 transition-colors rounded"
                 onClick={() => {
-                  setCoachingMutation({ isShowing: true, type: "add" });
-                  setCoachingVal("");
-                  coachingtInputRef?.current?.focus();
+                  setExpertiseMutation({ isShowing: true, type: "add" });
+                  setExpertiseVal("");
+                  expertiseInputRef?.current?.focus();
                 }}
               >
                 <svg
@@ -53,13 +53,13 @@ export const CoachingExperience: FunctionComponent = () => {
               sideOffset={2}
               className="bg-zinc-800 z-50 text-xs text-white px-2 py-1 rounded font-medium"
             >
-              Add coaching experience
+              Add expertise
             </Tooltip.Content>
           </Tooltip.Root>
         </Tooltip.Provider>
       </div>
 
-      {coaching.length === 0 ? (
+      {expertise.length === 0 ? (
         <div className="border-2 bg-gray-50/50 rounded-lg border-dashed w-full flex items-center justify-center">
           <div className="py-4">
             <div className="flex justify-center">
@@ -69,32 +69,32 @@ export const CoachingExperience: FunctionComponent = () => {
               role="button"
               className="text-gray-500"
               onClick={() => {
-                setCoachingMutation({ isShowing: true, type: "add" });
-                coachingtInputRef?.current?.focus();
+                setExpertiseMutation({ isShowing: true, type: "add" });
+                expertiseInputRef?.current?.focus();
               }}
             >
-              Add details on coaching experience
+              Add area of expertise
             </h3>
           </div>
         </div>
       ) : (
         <ul className="space-y-2">
-          {coaching.map((item, index) => (
+          {expertise.map((item, index) => (
             <div
               key={index}
-              className="text-sm border-l-4 border-l-indigo-400 border-y border-r rounded-r grid grid-cols-12"
+              className="text-sm border-l-4 border-l-blue-400 border-y border-r rounded-r grid grid-cols-12"
             >
-              <h3 className="col-span-10 pl-4 py-2">{item.name}</h3>
+              <h3 className="col-span-10 pl-4 py-2">{item.subjectMatter}</h3>
               <div className="col-span-2 py-2 text-center flex items-start justify-center gap-1">
                 <Tooltip.Provider delayDuration={500}>
                   <Tooltip.Root>
                     <Tooltip.Trigger asChild>
                       <button
                         onClick={() => {
-                          setCoachingMutation({ isShowing: true, type: "edit" });
-                          setCoachingVal(item.name);
-                          setCoachingIndexToEdit(index);
-                          coachingtInputRef?.current?.focus();
+                          setExpertiseMutation({ isShowing: true, type: "edit" });
+                          setExpertiseVal(item.subjectMatter);
+                          setExpertiseIndexToEdit(index);
+                          expertiseInputRef?.current?.focus();
                         }}
                       >
                         <svg
@@ -129,11 +129,11 @@ export const CoachingExperience: FunctionComponent = () => {
                     <Tooltip.Trigger asChild>
                       <button
                         onClick={() => {
-                          const newCoaching = [...coaching];
-                          newCoaching.splice(index, 1);
-                          setCoaching(newCoaching);
-                          setCoachingMutation({ isShowing: false, type: null });
-                          setCoachingVal("");
+                          const newExpertise = [...expertise];
+                          newExpertise.splice(index, 1);
+                          setExpertise(newExpertise);
+                          setExpertiseMutation({ isShowing: false, type: null });
+                          setExpertiseVal("");
                         }}
                       >
                         <svg
@@ -166,50 +166,50 @@ export const CoachingExperience: FunctionComponent = () => {
         </ul>
       )}
 
-      {coachingMutation.isShowing && (
+      {expertiseMutation.isShowing && (
         <div>
           <input
-            value={coachingVal}
-            onChange={(e) => setCoachingVal(e.target.value)}
-            ref={coachingtInputRef}
+            value={expertiseVal}
+            onChange={(e) => setExpertiseVal(e.target.value)}
+            ref={expertiseInputRef}
             type="text"
-            placeholder="Please specify the project name"
+            placeholder="Please specify subject matter expertise"
             className="py-2 px-3 placeholder:text-gray-300 block w-full border-gray-200 rounded text-xs focus:border-indigo-500 focus:ring-indigo-500"
           />
 
           <div className="flex items-center gap-1 mt-2">
             <button
-              disabled={coachingVal === ""}
+              disabled={expertiseVal === ""}
               onClick={() => {
                 /**
                  * Check if type id edit
                  */
-                if (coachingMutation.type === "edit") {
+                if (expertiseMutation.type === "edit") {
                   // get a copy of the current expertise state
-                  const newCoaching = [...coaching];
+                  const newExpertise = [...expertise];
 
                   // update the value of the expertise based on what is typed by the user
-                  newCoaching[coachingIndexToEdit].name = coachingVal;
+                  newExpertise[expertiseIndexToEdit].subjectMatter = expertiseVal;
 
                   // set the new state for expertise
-                  setCoaching(newCoaching);
+                  setExpertise(newExpertise);
 
                   // reset the value of editExpertise value for index to update
-                  setCoachingIndexToEdit(-1);
+                  setExpertiseIndexToEdit(-1);
 
                   /**
                    * If type is add
                    */
-                } else if (coachingMutation.type === "add") {
+                } else if (expertiseMutation.type === "add") {
                   // add the new expertise in the array
-                  setCoaching([...coaching, { name: coachingVal }]);
+                  setExpertise([...expertise, { subjectMatter: expertiseVal }]);
                 }
 
                 // reset the value of expertiseVal state
-                setCoachingVal("");
+                setExpertiseVal("");
 
                 // reset the value of addExpertise state
-                setCoachingMutation({ isShowing: false, type: null });
+                setExpertiseMutation({ isShowing: false, type: null });
               }}
               className="text-xs py-1 px-2 inline-flex justify-center items-center gap-2 rounded border border-transparent font-semibold bg-indigo-500 text-white hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all"
             >
@@ -217,8 +217,8 @@ export const CoachingExperience: FunctionComponent = () => {
             </button>
             <button
               onClick={() => {
-                setCoachingMutation({ isShowing: false, type: null });
-                setCoachingVal("");
+                setExpertiseMutation({ isShowing: false, type: null });
+                setExpertiseVal("");
               }}
               className="text-xs py-1 px-2 inline-flex justify-center items-center gap-2 rounded-md border font-medium bg-white text-gray-700 shadow-sm align-middle hover:bg-gray-50 outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-indigo-600 transition-all"
             >

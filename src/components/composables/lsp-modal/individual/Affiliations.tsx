@@ -1,43 +1,49 @@
 "use client";
 
+import { useLspDetailsStore } from "@lms/utilities/stores/lsp-details-store";
 import { FunctionComponent, MutableRefObject, useEffect, useRef, useState } from "react";
 import * as Tooltip from "@radix-ui/react-tooltip";
-import { useLspDetailsStore } from "@lms/utilities/stores/lsp-details-store";
-import { UndrawContractSvg } from "./UndrawContractSvg";
+import { UndrawContractSvg } from "../UndrawContractSvg";
 
-type AwardsMutation = {
+type AffiliationMutation = {
   isShowing: boolean;
   type: null | "add" | "edit";
 };
 
-export const AwardsAndRecognitions: FunctionComponent = () => {
-  const awards = useLspDetailsStore((state) => state.awards);
-  const setAwards = useLspDetailsStore((state) => state.setAwards);
+export const Affiliations: FunctionComponent = () => {
+  const affiliations = useLspDetailsStore((state) => state.affiliations);
+  const setAffiliations = useLspDetailsStore((state) => state.setAffiliations);
 
-  const [awardsVal, setAwardsVal] = useState("");
-  const [awardsIndexToEdit, setAwardsIndexToEdit] = useState(-1);
-  const [awardsMutation, setAwardsMutation] = useState<AwardsMutation>({ isShowing: false, type: null });
+  const [affiliationMutation, setaffiliationMutation] = useState<AffiliationMutation>({
+    isShowing: false,
+    type: null,
+  });
+  const [positionVal, setPositionVal] = useState("");
+  const [institutionVal, setInstitutionVal] = useState("");
 
-  const awardsInputRef = useRef(null) as unknown as MutableRefObject<HTMLInputElement>;
+  const [affiliationIndexToEdit, setAffiliationIndexToEdit] = useState(-1);
+
+  const positionInputRef = useRef(null) as unknown as MutableRefObject<HTMLInputElement>;
 
   useEffect(() => {
-    if (awardsMutation.isShowing) awardsInputRef?.current?.focus();
-  }, [awardsMutation.isShowing]);
+    if (affiliationMutation.isShowing) positionInputRef?.current?.focus();
+  }, [affiliationMutation.isShowing]);
 
   return (
     <>
       <div className="w-full flex items-center justify-between">
-        <p className="text-xs font-medium text-gray-600">Awards & recognitions</p>
+        <p className="text-xs font-medium text-gray-600">Affilations</p>
         <Tooltip.Provider delayDuration={500}>
           <Tooltip.Root>
             <Tooltip.Trigger asChild>
               <button
-                className="flex items-center justify-center h-5 w-5 hover:bg-gray-100 transition-colors rounded"
                 onClick={() => {
-                  setAwardsMutation({ isShowing: true, type: "add" });
-                  setAwardsVal("");
-                  awardsInputRef?.current?.focus();
+                  positionInputRef?.current?.focus();
+                  setaffiliationMutation({ isShowing: true, type: "add" });
+                  setPositionVal("");
+                  setInstitutionVal("");
                 }}
+                className="flex items-center justify-center h-5 w-5 hover:bg-gray-100 transition-colors rounded"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -53,13 +59,12 @@ export const AwardsAndRecognitions: FunctionComponent = () => {
               sideOffset={2}
               className="bg-zinc-800 z-50 text-xs text-white px-2 py-1 rounded font-medium"
             >
-              Add award & recognition
+              Add affiliation
             </Tooltip.Content>
           </Tooltip.Root>
         </Tooltip.Provider>
       </div>
-
-      {awards.length === 0 ? (
+      {affiliations.length === 0 ? (
         <div className="border-2 bg-gray-50/50 rounded-lg border-dashed w-full flex items-center justify-center">
           <div className="py-4">
             <div className="flex justify-center">
@@ -69,32 +74,36 @@ export const AwardsAndRecognitions: FunctionComponent = () => {
               role="button"
               className="text-gray-500"
               onClick={() => {
-                setAwardsMutation({ isShowing: true, type: "add" });
-                awardsInputRef?.current?.focus();
+                setaffiliationMutation({ isShowing: true, type: "add" });
+                positionInputRef?.current?.focus();
               }}
             >
-              Add awards & recognitions
+              Add affiliation details
             </h3>
           </div>
         </div>
       ) : (
         <ul className="space-y-2">
-          {awards.map((item, index) => (
+          {affiliations.map((item, index) => (
             <div
               key={index}
-              className="text-sm border-l-4 border-l-blue-400 border-y border-r rounded-r grid grid-cols-12"
+              className="text-sm border-l-4 border-l-teal-400 border-y border-r rounded-r grid grid-cols-12"
             >
-              <h3 className="col-span-10 pl-4 py-2">{item.name}</h3>
+              <div className="col-span-10 pl-4 py-2">
+                <h3 className="font-medium">{item.position}</h3>
+                <p className="text-xs text-gray-500">{item.institution}</p>
+              </div>
               <div className="col-span-2 py-2 text-center flex items-start justify-center gap-1">
                 <Tooltip.Provider delayDuration={500}>
                   <Tooltip.Root>
                     <Tooltip.Trigger asChild>
                       <button
                         onClick={() => {
-                          setAwardsMutation({ isShowing: true, type: "edit" });
-                          setAwardsVal(item.name);
-                          setAwardsIndexToEdit(index);
-                          awardsInputRef?.current?.focus();
+                          setAffiliationIndexToEdit(index);
+                          setaffiliationMutation({ isShowing: true, type: "edit" });
+                          setPositionVal(item.position);
+                          setInstitutionVal(item.institution);
+                          positionInputRef?.current?.focus();
                         }}
                       >
                         <svg
@@ -129,11 +138,12 @@ export const AwardsAndRecognitions: FunctionComponent = () => {
                     <Tooltip.Trigger asChild>
                       <button
                         onClick={() => {
-                          const newAwards = [...awards];
-                          newAwards.splice(index, 1);
-                          setAwards(newAwards);
-                          setAwardsMutation({ isShowing: false, type: null });
-                          setAwardsVal("");
+                          const newAffiliations = [...affiliations];
+                          newAffiliations.splice(index, 1);
+                          setAffiliations(newAffiliations);
+                          setaffiliationMutation({ isShowing: false, type: null });
+                          setPositionVal("");
+                          setInstitutionVal("");
                         }}
                       >
                         <svg
@@ -165,51 +175,75 @@ export const AwardsAndRecognitions: FunctionComponent = () => {
           ))}
         </ul>
       )}
+      {affiliationMutation.isShowing && (
+        // this part should be form
+        <div className="">
+          <div className="flex items-center gap-2">
+            <div>
+              <label htmlFor="position" className="text-xs font-medium text-gray-600">
+                Position
+              </label>
+              <input
+                id="position"
+                value={positionVal}
+                ref={positionInputRef}
+                onChange={(e) => setPositionVal(e.target.value)}
+                type="text"
+                placeholder="Please specify the position"
+                className="py-2 px-3 placeholder:text-gray-300 block w-full border-gray-200 rounded text-xs focus:border-indigo-500 focus:ring-indigo-500"
+              />
+            </div>
 
-      {awardsMutation.isShowing && (
-        <div>
-          <input
-            value={awardsVal}
-            onChange={(e) => setAwardsVal(e.target.value)}
-            ref={awardsInputRef}
-            type="text"
-            placeholder="Please specify the name of award or recognition"
-            className="py-2 px-3 placeholder:text-gray-300 block w-full border-gray-200 rounded text-xs focus:border-indigo-500 focus:ring-indigo-500"
-          />
+            <div>
+              <label htmlFor="aff-institution" className="text-xs font-medium text-gray-600">
+                Institution
+              </label>
+              <input
+                id="aff-institution"
+                value={institutionVal}
+                onChange={(e) => setInstitutionVal(e.target.value)}
+                type="text"
+                placeholder="Please specify the institution"
+                className="py-2 px-3 placeholder:text-gray-300 block w-full border-gray-200 rounded text-xs focus:border-indigo-500 focus:ring-indigo-500"
+              />
+            </div>
+          </div>
 
           <div className="flex items-center gap-1 mt-2">
             <button
-              disabled={awardsVal === ""}
               onClick={() => {
                 /**
-                 * Check if type id edit
+                 * Check if mutation type is edit
                  */
-                if (awardsMutation.type === "edit") {
-                  // get a copy of the current expertise state
-                  const newAwards = [...awards];
+                if (affiliationMutation.type === "edit") {
+                  // create a copy of education array
+                  const newAffiliations = [...affiliations];
 
-                  // update the value of the expertise based on what is typed by the user
-                  newAwards[awardsIndexToEdit].name = awardsVal;
+                  // set the updated value of the education details on the selected index
+                  newAffiliations[affiliationIndexToEdit] = { position: positionVal, institution: institutionVal };
 
-                  // set the new state for expertise
-                  setAwards(newAwards);
+                  // update the education array
+                  setAffiliations(newAffiliations);
 
-                  // reset the value of editExpertise value for index to update
-                  setAwardsIndexToEdit(-1);
+                  // reset the index value
+                  setAffiliationIndexToEdit(-1);
 
                   /**
-                   * If type is add
+                   * Check if mutation type is add
                    */
-                } else if (awardsMutation.type === "add") {
-                  // add the new expertise in the array
-                  setAwards([...awards, { name: awardsVal }]);
+                } else if (affiliationMutation.type === "add") {
+                  // add the new education in the array
+                  setAffiliations([...affiliations, { position: positionVal, institution: institutionVal }]);
                 }
 
-                // reset the value of expertiseVal state
-                setAwardsVal("");
+                // reset the mutation values
+                setaffiliationMutation({ isShowing: false, type: null });
 
-                // reset the value of addExpertise state
-                setAwardsMutation({ isShowing: false, type: null });
+                // reset value of degreeVal state
+                setPositionVal("");
+
+                // reset value of institutionVal state
+                setInstitutionVal("");
               }}
               className="text-xs py-1 px-2 inline-flex justify-center items-center gap-2 rounded border border-transparent font-semibold bg-indigo-500 text-white hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all"
             >
@@ -217,8 +251,7 @@ export const AwardsAndRecognitions: FunctionComponent = () => {
             </button>
             <button
               onClick={() => {
-                setAwardsMutation({ isShowing: false, type: null });
-                setAwardsVal("");
+                setaffiliationMutation({ isShowing: false, type: null });
               }}
               className="text-xs py-1 px-2 inline-flex justify-center items-center gap-2 rounded-md border font-medium bg-white text-gray-700 shadow-sm align-middle hover:bg-gray-50 outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-indigo-600 transition-all"
             >

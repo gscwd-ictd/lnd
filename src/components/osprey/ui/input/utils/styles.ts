@@ -8,7 +8,7 @@ export const styles = {
     color?: "primary" | "success" | "error"
   ) =>
     cls(
-      "block w-full placeholder:text-gray-300 outline-none border focus:ring-2 rounded text-sm transition-colors",
+      "block w-full placeholder:text-gray-400 outline-none border focus:ring-2 rounded text-sm transition-colors",
       {
         "border-gray-200 focus:border-indigo-400 focus:ring-indigo-100 hover:border-indigo-400":
           color === "primary" && !disabled,
@@ -18,9 +18,9 @@ export const styles = {
 
         "border-red-400 focus:border-red-500 focus:ring-red-100 hover:border-red-500": color === "error" && !disabled,
 
-        "bg-gray-100 border-gray-200": disabled,
+        "bg-gray-50 border-gray-100": disabled,
 
-        "py-2 px-3 ": size === "small",
+        "py-2 px-3": size === "small",
 
         "py-3 px-4": size === "default",
 

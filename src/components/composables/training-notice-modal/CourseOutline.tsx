@@ -1,20 +1,23 @@
 "use client";
 
 import { FunctionComponent, MutableRefObject, useRef, useState } from "react";
-import * as Tooltip from "@radix-ui/react-tooltip";
 import { UndrawContractSvg } from "../lsp-modal/UndrawContractSvg";
 import { Input } from "@lms/components/osprey/ui/input/view/Input";
 import { CourseContent } from "@lms/utilities/types/training";
+import * as Tooltip from "@radix-ui/react-tooltip";
+import { useTrainingNoticeStore } from "@lms/utilities/stores/training-notice-store";
 
 type Mutation = {
   type: "add" | "edit";
 };
 
 export const CourseOutline: FunctionComponent = () => {
-  const [courseContents, setCourseContents] = useState<CourseContent[]>([]);
   const [courseVal, setCourseVal] = useState("");
   const [mutation, setMutation] = useState<Mutation>({ type: "add" });
   const [courseIndexToEdit, setCourseIndexToEdit] = useState(-1);
+
+  const courseContents = useTrainingNoticeStore((state) => state.courseContents);
+  const setCourseContents = useTrainingNoticeStore((state) => state.setCourseContents);
 
   const courseInputRef = useRef(null) as unknown as MutableRefObject<HTMLInputElement>;
 
@@ -22,28 +25,49 @@ export const CourseOutline: FunctionComponent = () => {
     <>
       <div className="w-full flex items-center justify-between mb-10">
         <div className="mt-1 w-full">
-          <div className="mb-2">
-            <label htmlFor="course-content" className="block text-xs font-medium text-gray-700">
-              Course content
-            </label>
-            <p className="text-xs text-gray-500">The specific subject matter & topics covered in the training.</p>
-          </div>
           <form
             className="space-y-1"
             onSubmit={(e) => {
               e.preventDefault();
+
+              /**
+               *  if mutation type is add
+               */
               if (mutation.type === "add") {
+                // add course item
                 setCourseContents([...courseContents, { title: courseVal }]);
+
+                /**
+                 *  if mutation type is edit
+                 */
               } else if (mutation.type === "edit") {
+                // create a copy of course content
                 const newCourseContents = [...courseContents];
+
+                // update the value of selected course item
                 newCourseContents[courseIndexToEdit] = { title: courseVal };
+
+                // set new value for course content
                 setCourseContents(newCourseContents);
+
+                // reset mutation type to add
                 setMutation({ type: "add" });
+
+                // reset course index to edit
                 setCourseIndexToEdit(-1);
               }
+
+              // reset value for input
               setCourseVal("");
             }}
           >
+            <div className="mb-2">
+              <label htmlFor="course-content" className="block text-xs font-medium text-gray-700">
+                Course content
+              </label>
+              <p className="text-xs text-gray-500">The specific subject matter & topics covered in the training.</p>
+            </div>
+
             <Input
               ref={courseInputRef}
               id="course-content"

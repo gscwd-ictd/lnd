@@ -1,89 +1,83 @@
 "use client";
 
-import { FunctionComponent, useState } from "react";
 import { RadioGroup } from "@headlessui/react";
+import {
+  useSelectedTrainingType,
+  useTrainingNoticeStore,
+  useTrainingTypesStore,
+} from "@lms/utilities/stores/training-notice-store";
+import { TrainingType } from "@lms/utilities/types/training";
+import { url } from "@lms/utilities/url/api-url";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { TrainingType } from "@lms/lib/types/training-type.type";
-import { url } from "@lms/utilities/url/api-url";
-import { useTrainingNoticeStore } from "@lms/utilities/stores/training-notice-store";
+import { Fragment, FunctionComponent, useEffect, useState } from "react";
 
 export const ChooseTrainingType: FunctionComponent = () => {
-  const [types, setTypes] = useState<TrainingType[]>([]);
-  const selected = useTrainingNoticeStore((state) => state.trainingType);
-  const setSelected = useTrainingNoticeStore((state) => state.setTrainingType);
-  //const [selected, setSelected] = useState(types[0]);
+  // the state to hold all training type options
+  const { trainingTypes, setTrainingTypes } = useTrainingTypesStore();
+
+  // the state to hold the selected training type from the options
+  const selectedTrainingType = useSelectedTrainingType((state) => state.selectedTrainingType);
+  const setSelectedTrainingType = useSelectedTrainingType((state) => state.setSelectedTrainingType);
+
+  const setTrainingType = useTrainingNoticeStore((state) => state.setTrainingType);
+
+  useEffect(() => {
+    if (selectedTrainingType === undefined) setSelectedTrainingType(trainingTypes[0]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [trainingTypes]);
 
   useQuery({
-    queryKey: ["training-type"],
+    queryKey: ["training-type", trainingTypes],
     queryFn: async () => {
       const { data } = await axios.get(`${url}/training-types`);
-      setTypes(data.items);
-      return data;
+      setTrainingTypes(data.items);
+      return data.items as TrainingType[];
     },
+    enabled: trainingTypes.length === 0,
   });
 
-  return (
-    <div className="w-full px-4 pt-10">
-      <div className="mx-auto w-full max-w-md">
-        <h3 className="mb-4 font-medium text-gray-700">Please choose a training type:</h3>
+  useEffect(() => {
+    setTrainingType(selectedTrainingType?.id as string);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedTrainingType]);
 
-        <RadioGroup value={selected} onChange={setSelected}>
-          {/* <RadioGroup.Label className="sr-only">Server size</RadioGroup.Label> */}
-          <div className="space-y-2">
-            {types.map((type, index) => (
-              <RadioGroup.Option
-                key={index}
-                value={type}
-                className={({ active, checked }) =>
-                  `${checked ? "bg-indigo-700 bg-opacity-75 text-white" : "bg-white"}
-                    relative flex cursor-pointer rounded-lg px-5 py-4 border focus:outline-none`
-                }
-              >
-                {({ active, checked }) => (
-                  <>
-                    <div className="flex w-full items-center justify-between">
-                      <div className="flex items-center">
-                        <div className="text-sm">
-                          <RadioGroup.Label
-                            as="p"
-                            className={`font-medium  ${checked ? "text-white" : "text-gray-900"}`}
-                          >
-                            {type.name}
-                          </RadioGroup.Label>
-                          {/* <RadioGroup.Description
-                            as="span"
-                            className={`inline ${checked ? "text-indigo-100" : "text-gray-500"}`}
-                          >
-                            <span>
-                              {plan.ram}/{plan.cpus}
-                            </span>{" "}
-                            <span aria-hidden="true">&middot;</span> <span>{plan.disk}</span>
-                          </RadioGroup.Description> */}
-                        </div>
-                      </div>
-                      {checked && (
-                        <div className="shrink-0 text-white">
-                          <CheckIcon className="h-6 w-6" />
-                        </div>
-                      )}
-                    </div>
-                  </>
-                )}
-              </RadioGroup.Option>
-            ))}
-          </div>
-        </RadioGroup>
+  return (
+    <RadioGroup name="type" defaultValue={trainingTypes[0]} className="">
+      <div className="mb-3 mt-5">
+        <RadioGroup.Label as="div">
+          <h3>Training Types</h3>
+          <p className="text-xs text-gray-500">Choose a training type from the options below</p>
+        </RadioGroup.Label>
       </div>
-    </div>
+      {trainingTypes.map((type, index) => (
+        <RadioGroup.Option key={index} value={type.id} as={Fragment}>
+          {({ active, checked }) => {
+            // set checked value if training type from global store is equal to current name
+            checked = selectedTrainingType?.name === type.name;
+
+            return (
+              <div
+                className={`${
+                  checked ? "bg-indigo-500 text-white font-medium" : "bg-white text-gray-600"
+                } cursor-pointer px-4 py-2 mb-2 border rounded flex items-center justify-between hover:scale-105 transition-transform`}
+                onClick={() => setSelectedTrainingType(type)}
+              >
+                <p>{type.name}</p>
+                {checked && (
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+                    <path
+                      fillRule="evenodd"
+                      d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                )}
+              </div>
+            );
+          }}
+        </RadioGroup.Option>
+      ))}
+    </RadioGroup>
   );
 };
-
-function CheckIcon(props: any) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" {...props}>
-      <circle cx={12} cy={12} r={12} fill="#fff" opacity="0.2" />
-      <path d="M7 13l3 3 7-7" stroke="#fff" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}

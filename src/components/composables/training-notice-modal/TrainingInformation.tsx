@@ -1,7 +1,27 @@
 import { Input } from "@lms/components/osprey/ui/input/view/Input";
+import { useTrainingNoticeStore } from "@lms/utilities/stores/training-notice-store";
 import { FunctionComponent } from "react";
+import dayjs from "dayjs";
 
 export const TrainingInformation: FunctionComponent = () => {
+  const trainingStart = useTrainingNoticeStore((state) => state.trainingStart);
+  const setTrainingStart = useTrainingNoticeStore((state) => state.setTrainingStart);
+
+  const trainingEnd = useTrainingNoticeStore((state) => state.trainingEnd);
+  const setTrainingEnd = useTrainingNoticeStore((state) => state.setTrainingEnd);
+
+  const numberOfHours = useTrainingNoticeStore((state) => state.numberOfHours);
+  const setNumberOfHours = useTrainingNoticeStore((state) => state.setNumberOfHours);
+
+  const courseTitle = useTrainingNoticeStore((state) => state.courseTitle);
+  const setCourseTitle = useTrainingNoticeStore((state) => state.setCourseTitle);
+
+  const facilitator = useTrainingNoticeStore((state) => state.facilitator);
+  const setFacilitator = useTrainingNoticeStore((state) => state.setFacilitator);
+
+  const location = useTrainingNoticeStore((state) => state.location);
+  const setLocation = useTrainingNoticeStore((state) => state.setLocation);
+
   return (
     <>
       <div className="mt-1">
@@ -17,6 +37,8 @@ export const TrainingInformation: FunctionComponent = () => {
               From
             </label>
             <input
+              value={trainingStart}
+              onChange={(e) => setTrainingStart(e.target.value)}
               id="from"
               type="date"
               className="border-gray-200 text-sm rounded text-gray-700 w-full focus:border-indigo-500 focus:ring-indigo-500"
@@ -27,6 +49,8 @@ export const TrainingInformation: FunctionComponent = () => {
               To
             </label>
             <input
+              value={trainingEnd}
+              onChange={(e) => setTrainingEnd(e.target.value)}
               id="to"
               type="date"
               className="border-gray-200 text-sm rounded text-gray-700 w-full focus:border-indigo-500 focus:ring-indigo-500"
@@ -43,6 +67,9 @@ export const TrainingInformation: FunctionComponent = () => {
           <p className="text-xs text-gray-500">The duration or length of the training.</p>
         </div>
         <Input
+          value={numberOfHours}
+          onChange={(e) => setNumberOfHours(Number(e.target.value))}
+          type="number"
           id="hrs"
           placeholder="Please indicate the training's duration in hours"
           size="small"
@@ -60,6 +87,8 @@ export const TrainingInformation: FunctionComponent = () => {
           </p>
         </div>
         <Input
+          value={courseTitle}
+          onChange={(e) => setCourseTitle(e.target.value)}
           id="course-title"
           placeholder="Please indicate the training's course title"
           size="small"
@@ -81,6 +110,8 @@ export const TrainingInformation: FunctionComponent = () => {
           <p className="text-xs text-gray-500">The ones responsible for leading and guiding the training process.</p>
         </div>
         <Input
+          value={facilitator}
+          onChange={(e) => setFacilitator(e.target.value)}
           id="facilitator"
           placeholder="Please indicate the training's designated facilitator"
           size="small"
@@ -96,6 +127,8 @@ export const TrainingInformation: FunctionComponent = () => {
           <p className="text-xs text-gray-500">The designated venue or setting for the training.</p>
         </div>
         <textarea
+          value={location}
+          onChange={(e) => setLocation(e.target.value)}
           id="location"
           style={{ resize: "none" }}
           rows={2}

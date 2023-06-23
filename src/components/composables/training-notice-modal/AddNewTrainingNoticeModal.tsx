@@ -11,7 +11,7 @@ import { FunctionComponent, useEffect, useState } from "react";
 import { TrainingInformation } from "./TrainingInformation";
 import { CourseOutline } from "./CourseOutline";
 import { ChooseTrainingType } from "./ChooseTrainingType";
-import { useTrainingNoticeStore } from "@lms/utilities/stores/training-notice-store";
+import { useSelectedTrainingType } from "@lms/utilities/stores/training-notice-store";
 
 export const AddNewTrainingNoticeModal: FunctionComponent = () => {
   const [open, setOpen] = useState(false);
@@ -20,7 +20,7 @@ export const AddNewTrainingNoticeModal: FunctionComponent = () => {
   const [selectedSource, setSelectedSource] = useState<TrainingSource>();
   const [page, setPage] = useState(1);
 
-  const trainingType = useTrainingNoticeStore((state) => state.trainingType);
+  const selectedTrainingType = useSelectedTrainingType((state) => state.selectedTrainingType);
 
   useEffect(() => {
     const getTrainingSource = async () => {
@@ -32,7 +32,7 @@ export const AddNewTrainingNoticeModal: FunctionComponent = () => {
   }, []);
 
   return (
-    <Modal isOpen={open} setIsOpen={setOpen} size="md">
+    <Modal isOpen={open} setIsOpen={setOpen} size="md" isStatic>
       <DropdownMenu.Root open={dropdownOpen} onOpenChange={setDropdownOpen}>
         <DropdownMenu.Trigger asChild>
           <Button size="small">
@@ -89,6 +89,13 @@ export const AddNewTrainingNoticeModal: FunctionComponent = () => {
             <div className="flex items-start gap-2">
               <h3 className="text-lg font-semibold text-gray-600">Notice of Training</h3>
               <div className="flex items-center gap-1">
+                {selectedTrainingType !== undefined && (
+                  <p
+                    className={`text-purple-600 bg-purple-50 border-purple-100 text-xs px-[0.25rem] py-[0.1rem] font-semibold rounded border`}
+                  >
+                    {selectedTrainingType.name}
+                  </p>
+                )}
                 <p
                   className={`${
                     selectedSource?.name === "Internal"
@@ -100,13 +107,6 @@ export const AddNewTrainingNoticeModal: FunctionComponent = () => {
                 >
                   {selectedSource?.name}
                 </p>
-                {trainingType !== undefined && (
-                  <p
-                    className={`text-purple-600 bg-purple-50 border-purple-100 text-xs px-[0.25rem] py-[0.1rem] font-semibold rounded border`}
-                  >
-                    {trainingType.name}
-                  </p>
-                )}
               </div>
             </div>
             <p className="text-sm text-gray-400">Fill in training details and course outline</p>
@@ -136,10 +136,10 @@ export const AddNewTrainingNoticeModal: FunctionComponent = () => {
               <Button
                 size="small"
                 onClick={() => {
-                  page === 11 ? console.log("save") : setPage(page + 1);
+                  page === 4 ? console.log("save") : setPage(page + 1);
                 }}
               >
-                {page === 11 ? "Confirm" : "Proceed"}
+                {page === 4 ? "Confirm" : "Proceed"}
               </Button>
             </div>
           </div>

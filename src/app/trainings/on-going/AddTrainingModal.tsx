@@ -16,10 +16,6 @@ export const AddTrainingModal = () => {
   const [page, setPage] = useState(1);
   const [expertiseMutation, setExpertiseMutation] = useState<ExpertiseMutation>({ isShowing: false, type: null });
 
-  useEffect(() => {
-    console.log(expertiseMutation);
-  }, [expertiseMutation]);
-
   return (
     <>
       <Button

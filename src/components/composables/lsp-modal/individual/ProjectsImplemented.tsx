@@ -3,7 +3,7 @@
 import { useLspDetailsStore } from "@lms/utilities/stores/lsp-details-store";
 import { FunctionComponent, MutableRefObject, useEffect, useRef, useState } from "react";
 import * as Tooltip from "@radix-ui/react-tooltip";
-import { UndrawContractSvg } from "./UndrawContractSvg";
+import { UndrawContractSvg } from "../UndrawContractSvg";
 
 type ProjectsMutation = {
   isShowing: boolean;
