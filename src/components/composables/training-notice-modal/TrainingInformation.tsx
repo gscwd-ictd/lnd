@@ -1,7 +1,8 @@
+"use client";
+
 import { Input } from "@lms/components/osprey/ui/input/view/Input";
 import { useTrainingNoticeStore } from "@lms/utilities/stores/training-notice-store";
 import { FunctionComponent } from "react";
-import dayjs from "dayjs";
 
 export const TrainingInformation: FunctionComponent = () => {
   const trainingStart = useTrainingNoticeStore((state) => state.trainingStart);

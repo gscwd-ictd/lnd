@@ -1,3 +1,5 @@
+"use client";
+
 import { Input } from "@lms/components/osprey/ui/input/view/Input";
 import { useLspDetailsStore } from "@lms/utilities/stores/lsp-details-store";
 import { FunctionComponent } from "react";

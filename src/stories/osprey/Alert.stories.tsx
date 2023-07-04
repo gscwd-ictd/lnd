@@ -5,7 +5,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 const meta: Meta<typeof Alert> = {
   title: "Example/Alert",
   component: Alert,
-  // tags: ["autodocs"],
+  tags: ["autodocs"],
 };
 
 export default meta;

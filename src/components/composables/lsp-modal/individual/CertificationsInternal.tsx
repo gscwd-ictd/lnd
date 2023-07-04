@@ -1,3 +1,5 @@
+"use client";
+
 import { useLspDetailsStore } from "@lms/utilities/stores/lsp-details-store";
 import { FunctionComponent } from "react";
 

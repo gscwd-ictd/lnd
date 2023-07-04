@@ -111,6 +111,8 @@ export const DataTable = <T extends unknown>({
     onRowSelectionChange: setRowSelection,
   });
 
+  if (error) return <>Cannot fetch table data</>;
+
   return (
     <div className="relative border rounded overflow-clip overflow-x-auto shadow-md shadow-gray-50">
       <DataTableHeader<T> title={title} subtitle={subtitle} table={table} enableGlobalFilter={enableGlobalFilter} />

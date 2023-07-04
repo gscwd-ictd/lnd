@@ -1,3 +1,5 @@
+"use client";
+
 import { Combobox } from "@headlessui/react";
 import { Input } from "@lms/components/osprey/ui/input/view/Input";
 import {
