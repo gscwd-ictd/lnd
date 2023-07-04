@@ -52,7 +52,7 @@ export const ChooseTrainingType: FunctionComponent = () => {
       </div>
       {trainingTypes.map((type, index) => (
         <RadioGroup.Option key={index} value={type.id} as={Fragment}>
-          {({ active, checked }) => {
+          {({ checked }) => {
             // set checked value if training type from global store is equal to current name
             checked = selectedTrainingType?.name === type.name;
 

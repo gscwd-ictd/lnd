@@ -3,13 +3,14 @@
 import { Avatar } from "@lms/components/osprey/ui/avatar/view/Avatar";
 import { Button } from "@lms/components/osprey/ui/button/view/Button";
 import { Modal, ModalContent, ModalTrigger } from "@lms/components/osprey/ui/overlays/modal/view/Modal";
-import { FunctionComponent, useEffect, useState } from "react";
+import { FunctionComponent, useState } from "react";
 
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { AnimatePresence, motion } from "framer-motion";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import {
+  LspSourceOptions,
   useAddLspModalStore,
   useLspDetailsStore,
   useLspTypeStore,
@@ -18,16 +19,21 @@ import {
 import { url } from "@lms/utilities/url/api-url";
 import { ChooseLspSource } from "./ChooseLspSource";
 import { Affiliations } from "./individual/Affiliations";
-import { AwardsAndRecognitions } from "./individual/AwardsAndRecognitions";
-import { Certifications } from "./individual/Certifications";
+import { AwardsAndRecognitionsExternal } from "./individual/AwardsAndRecognitionsExternal";
+import { CertificationsExternal } from "./individual/CertificationsExternal";
 import { CoachingExperience } from "./individual/CoachingExperience";
-import { ContactInformation } from "./individual/ContactInformation";
-import { EducationDetails } from "./individual/EducationDetails";
+import { EducationDetailsExternal } from "./individual/EducationDetailsExternal";
 import { LspDetailsSummary } from "./individual/LspDetailsSummary";
-import { PersonalInformation } from "./individual/PersonalInformation";
 import { ProjectsImplemented } from "./individual/ProjectsImplemented";
 import { SubjectMatterExpertise } from "./individual/SubjectMatterExpertise";
 import { TrainingDetails } from "./individual/TrainingDetails";
+import { PersonalInformationInternal } from "./individual/PeronalInformationInternal";
+import { PersonalInformationExternal } from "./individual/PersonalInformationExternal";
+import { ContactInformationInternal } from "./individual/ContactInformationInternal";
+import { ContactInformationExternal } from "./individual/ContactInformationExternal";
+import { EducationDetailsInternal } from "./individual/EducationDetailsInternal";
+import { AwardsAndRecognitionInternal } from "./individual/AwardsAndRecognitionInternal";
+import { CertificationsInternal } from "./individual/CertificationsInternal";
 
 export const AddNewLspModal: FunctionComponent = () => {
   const [open, setOpen] = useState(false);
@@ -69,7 +75,7 @@ export const AddNewLspModal: FunctionComponent = () => {
     },
     onError: () => console.log("error"),
     mutationFn: async () => {
-      const response = await axios.post(`${url}/lsp-details`, {
+      const response = await axios.post(`${url}/lsp-individual-details`, {
         employeeId,
         firstName,
         middleName,
@@ -212,16 +218,60 @@ export const AddNewLspModal: FunctionComponent = () => {
           {lspType?.name === "Individual" ? (
             <main className="px-2 space-y-2">
               {page === 1 && <ChooseLspSource />}
-              {page === 2 && <PersonalInformation />}
-              {page === 3 && <ContactInformation />}
+
+              {page === 2 && (
+                <>
+                  {selectedLspSource?.name === LspSourceOptions.INTERNAL ? (
+                    <PersonalInformationInternal />
+                  ) : (
+                    <PersonalInformationExternal />
+                  )}
+                </>
+              )}
+
+              {page === 3 && (
+                <>
+                  {selectedLspSource?.name === LspSourceOptions.INTERNAL ? (
+                    <ContactInformationInternal />
+                  ) : (
+                    <ContactInformationExternal />
+                  )}
+                </>
+              )}
+
               {page === 4 && <SubjectMatterExpertise />}
-              {page === 5 && <EducationDetails />}
+
+              {page === 5 && (
+                <>
+                  {selectedLspSource?.name === LspSourceOptions.INTERNAL ? (
+                    <EducationDetailsInternal />
+                  ) : (
+                    <EducationDetailsExternal />
+                  )}
+                </>
+              )}
               {page === 6 && <TrainingDetails />}
               {page === 7 && <ProjectsImplemented />}
               {page === 8 && <CoachingExperience />}
               {page === 9 && <Affiliations />}
-              {page === 10 && <AwardsAndRecognitions />}
-              {page === 11 && <Certifications />}
+              {page === 10 && (
+                <>
+                  {selectedLspSource?.name === LspSourceOptions.INTERNAL ? (
+                    <AwardsAndRecognitionInternal />
+                  ) : (
+                    <AwardsAndRecognitionsExternal />
+                  )}
+                </>
+              )}
+              {page === 11 && (
+                <>
+                  {selectedLspSource?.name === LspSourceOptions.INTERNAL ? (
+                    <CertificationsInternal />
+                  ) : (
+                    <CertificationsExternal />
+                  )}
+                </>
+              )}
               {page === 12 && <LspDetailsSummary />}
             </main>
           ) : lspType?.name === "Organization" ? (

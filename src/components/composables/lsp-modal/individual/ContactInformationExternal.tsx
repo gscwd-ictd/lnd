@@ -1,12 +1,8 @@
-"use client";
-
 import { Input } from "@lms/components/osprey/ui/input/view/Input";
-import { LspSourceOptions, useLspDetailsStore, useSelectedLspSource } from "@lms/utilities/stores/lsp-details-store";
+import { useLspDetailsStore } from "@lms/utilities/stores/lsp-details-store";
 import { FunctionComponent } from "react";
 
-export const ContactInformation: FunctionComponent = () => {
-  const selectedLspSource = useSelectedLspSource((state) => state.selectedLspSource);
-
+export const ContactInformationExternal: FunctionComponent = () => {
   const number = useLspDetailsStore((state) => state.contactNumber);
   const setNumber = useLspDetailsStore((state) => state.setContactNumber);
 
@@ -26,7 +22,6 @@ export const ContactInformation: FunctionComponent = () => {
           id="number"
           value={number}
           onChange={(e) => setNumber(e.target.value)}
-          disabled={selectedLspSource?.name === LspSourceOptions.INTERNAL}
           size="small"
           placeholder="Enter contact number"
           className="placeholder:text-xs"
@@ -41,7 +36,6 @@ export const ContactInformation: FunctionComponent = () => {
           id="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          disabled={selectedLspSource?.name === LspSourceOptions.INTERNAL}
           size="small"
           placeholder="Enter email address"
           className="placeholder:text-xs"
@@ -52,19 +46,10 @@ export const ContactInformation: FunctionComponent = () => {
         <label htmlFor="address" className="text-xs font-medium text-gray-600">
           Postal address
         </label>
-        {/* <Input
-          id="address"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          disabled={selectedLspSource?.name === LspSourceOptions.INTERNAL}
-          size="small"
-          placeholder="Enter postal address"
-          className="placeholder:text-xs"
-        /> */}
+
         <textarea
           value={address}
           onChange={(e) => setAddress(e.target.value)}
-          disabled={selectedLspSource?.name === LspSourceOptions.INTERNAL}
           id="address"
           rows={4}
           placeholder="Enter postal address"

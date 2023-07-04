@@ -9,6 +9,7 @@ import * as Tooltip from "@radix-ui/react-tooltip";
 import { SlideOver } from "@lms/components/osprey/ui/overlays/slider-over/view/SliderOver";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import { LspSourceOptions } from "@lms/utilities/stores/lsp-details-store";
 
 const helper = createColumnHelper<LearningServiceProvider>();
 
@@ -27,10 +28,16 @@ const columns = [
     cell: (info) => info?.getValue()?.toLocaleLowerCase(),
   }),
 
-  helper.accessor("trainingSource", {
+  helper.accessor("lspSource", {
     header: "Source",
     cell: (info) => (
-      <span className="text-amber-600 bg-amber-50 border-amber-100 text-xs px-[0.25rem] py-[0.1rem] font-semibold rounded border">
+      <span
+        className={`${
+          info.getValue() === LspSourceOptions.INTERNAL
+            ? "text-purple-600 bg-purple-50 border-purple-100"
+            : "text-amber-600 bg-amber-50 border-amber-100"
+        } text-xs px-[0.25rem] py-[0.1rem] font-semibold rounded border`}
+      >
         {info.getValue()}
       </span>
     ),
@@ -115,7 +122,7 @@ export const LspDataTable: FunctionComponent = () => {
   const { data } = useQuery({
     queryKey: ["lsp-details", lspId],
     queryFn: async () => {
-      const { data } = await axios.get(`${url}/lsp-details/${lspId}`);
+      const { data } = await axios.get(`${url}/lsp-individual-details/${lspId}`);
       return data;
     },
   });
@@ -127,7 +134,7 @@ export const LspDataTable: FunctionComponent = () => {
         <SlideOver.Body>{data && JSON.stringify(data)}</SlideOver.Body>
       </SlideOver>
       <DataTable<LearningServiceProvider>
-        datasource={`${url}/lsp-details?page=1&limit=40`}
+        datasource={`${url}/lsp-individual-details?page=1&limit=40`}
         queryKey={["lsp"]}
         columns={columns}
         title="Learning Service Providers"

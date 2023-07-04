@@ -10,5 +10,5 @@ export type LearningServiceProvider = {
   contactNumber: string;
   email: string;
   postalAddress: string;
-  trainingSource: string;
+  lspSource: string;
 };

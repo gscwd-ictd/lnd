@@ -18,7 +18,7 @@ export const styles = {
 
         "border-red-400 focus:border-red-500 focus:ring-red-100 hover:border-red-500": color === "error" && !disabled,
 
-        "bg-gray-50 border-gray-100": disabled,
+        "bg-gray-50 border-gray-100 text-gray-500": disabled,
 
         "py-2 px-3": size === "small",
 

@@ -1,16 +1,18 @@
-"use client";
-
+import { Combobox } from "@headlessui/react";
 import { Input } from "@lms/components/osprey/ui/input/view/Input";
 import {
+  LspAward,
+  LspCertification,
+  LspEducation,
   LspSourceOptions,
   useEmployeeSearchStore,
   useLspDetailsStore,
   useSelectedLspSource,
 } from "@lms/utilities/stores/lsp-details-store";
+import { url } from "@lms/utilities/url/api-url";
 import { useQuery } from "@tanstack/react-query";
-import { FunctionComponent, useCallback, useEffect, useState } from "react";
-import { Combobox } from "@headlessui/react";
 import axios from "axios";
+import { FunctionComponent, useCallback, useState, useEffect } from "react";
 
 type EmployeeSearch = {
   employeeId: string;
@@ -18,16 +20,18 @@ type EmployeeSearch = {
   positionTitle: string;
 };
 
-export const PersonalInformation: FunctionComponent = () => {
+export const PersonalInformationInternal: FunctionComponent = () => {
   const selectedLspSource = useSelectedLspSource((state) => state.selectedLspSource);
 
-  const fname = useLspDetailsStore((state) => state.firstName);
+  const setLspEmployeeId = useLspDetailsStore((state) => state.setEmployeeId);
+
+  //const fname = useLspDetailsStore((state) => state.firstName);
   const setFname = useLspDetailsStore((state) => state.setFirstName);
 
-  const mname = useLspDetailsStore((state) => state.middleName);
+  //const mname = useLspDetailsStore((state) => state.middleName);
   const setMname = useLspDetailsStore((state) => state.setMiddleName);
 
-  const lname = useLspDetailsStore((state) => state.lastName);
+  // const lname = useLspDetailsStore((state) => state.lastName);
   const setLname = useLspDetailsStore((state) => state.setLastName);
 
   const experience = useLspDetailsStore((state) => state.experience);
@@ -36,9 +40,18 @@ export const PersonalInformation: FunctionComponent = () => {
   const intro = useLspDetailsStore((state) => state.introduction);
   const setIntro = useLspDetailsStore((state) => state.setIntroduction);
 
-  // const [employeeId, setEmployeeId] = useState<string>();
-  // const [employeePds, setEmployeePds] = useState<any>();
-  // const [searchInput, setSearchInput] = useState("");
+  const setContactNumber = useLspDetailsStore((state) => state.setContactNumber);
+
+  const setEmail = useLspDetailsStore((state) => state.setEmail);
+
+  const setPostalAddress = useLspDetailsStore((state) => state.setPostalAddress);
+
+  const setEducation = useLspDetailsStore((state) => state.setEducation);
+
+  const setAwards = useLspDetailsStore((state) => state.setAwards);
+
+  const setCertifications = useLspDetailsStore((state) => state.setCertifications);
+
   const { employeeId, setEmployeeId, employeePds, setEmployeePds, searchInput, setSearchInput } =
     useEmployeeSearchStore();
 
@@ -64,9 +77,7 @@ export const PersonalInformation: FunctionComponent = () => {
     };
   };
 
-  // http://172.20.110.45:4001/api/pds/v2/
-  // http://172.20.110.45:4003/api/employees/name?value=
-
+  // const debounceFn = useCallback((input: string) => debounce(() => onSearch(input)), []);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const debounceFn = useCallback(debounce(onSearch), []);
 
@@ -76,12 +87,15 @@ export const PersonalInformation: FunctionComponent = () => {
   const { data } = useQuery({
     queryKey: ["employee-names", search],
     queryFn: async () => {
-      const { data } = await axios.get(`http://172.20.110.45:4003/api/employees/name?value=${search}`);
+      const { data } = await axios.get(`${url}/employees/q?name=${search}`);
       return data as EmployeeSearch[];
     },
     enabled: search !== "",
   });
 
+  /**
+   *  get employee details via pds
+   */
   useQuery({
     queryKey: ["employee-pds", employeeId],
     queryFn: async () => {
@@ -93,18 +107,47 @@ export const PersonalInformation: FunctionComponent = () => {
   });
 
   useEffect(() => {
+    setLspEmployeeId(employeePds?.personalInfo._id as string);
     setFname(employeePds?.personalInfo.firstName as string);
     setMname(employeePds?.personalInfo.middleName as string);
     setLname(employeePds?.personalInfo.lastName as string);
+    setContactNumber(employeePds?.personalInfo.mobileNumber as string);
+    setEmail(employeePds?.personalInfo.email as string);
+    setPostalAddress(
+      `${employeePds?.permanentAddress.subdivision}, ${employeePds?.permanentAddress.barangay}, ${employeePds?.permanentAddress.city}`
+    );
+
+    const college = employeePds?.college.map((education) => ({
+      degree: education.degree,
+      institution: education.schoolName,
+    })) as unknown as Array<LspEducation>;
+
+    const graduate = employeePds?.graduate.map((education) => ({
+      degree: education.degree,
+      institution: education.schoolName,
+    })) as unknown as Array<LspEducation>;
+
+    setEducation(college?.concat(graduate));
+
+    const awards = employeePds?.recognitions.map(({ recognition }) => ({
+      name: recognition,
+    }));
+
+    setAwards(awards as unknown as Array<LspAward>);
+
+    const certs = employeePds?.eligibility.map((cert) => ({ name: cert.name }));
+
+    setCertifications(certs as unknown as Array<LspCertification>);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [employeeId, employeePds]);
+  }, [employeeId, employeePds, selected]);
 
   return (
     <>
       {selectedLspSource?.name === LspSourceOptions.INTERNAL && (
         <div className="relative">
           <label htmlFor="search-emp" className="text-xs font-medium text-gray-600">
-            Search for employee
+            Full name
           </label>
 
           <Combobox
@@ -116,6 +159,7 @@ export const PersonalInformation: FunctionComponent = () => {
             }}
           >
             <Combobox.Input
+              id="search-emp"
               value={searchInput}
               as={Input}
               size="small"
@@ -134,7 +178,7 @@ export const PersonalInformation: FunctionComponent = () => {
                 data?.map((selectedEmp, index) => {
                   return (
                     <Combobox.Option key={index} value={selectedEmp}>
-                      {({ active, selected }) => {
+                      {({ active }) => {
                         return (
                           <div
                             role="button"
@@ -142,8 +186,10 @@ export const PersonalInformation: FunctionComponent = () => {
                               active ? "bg-indigo-500 text-white" : ""
                             } border-b border-b-gray-100 px-2 py-1`}
                           >
-                            <h3>{selectedEmp.fullName}</h3>
-                            <p className="text-sm">{selectedEmp.positionTitle}</p>
+                            <h3 className={`${active ? "text-indigo-50" : "text-gray-700"} font-medium`}>
+                              {selectedEmp.fullName}
+                            </h3>
+                            <p className={`${active ? "" : "text-gray-400"} text-xs`}>{selectedEmp.positionTitle}</p>
                           </div>
                         );
                       }}
@@ -156,17 +202,15 @@ export const PersonalInformation: FunctionComponent = () => {
         </div>
       )}
 
-      <div>
+      {/* <div>
         <label htmlFor="fname" className="text-xs font-medium text-gray-600">
           First Name
         </label>
 
         <Input
           id="fname"
-          defaultValue={selectedLspSource?.name === LspSourceOptions.INTERNAL ? fname : undefined}
-          value={selectedLspSource?.name === LspSourceOptions.INTERNAL ? undefined : fname}
-          onChange={(e) => (selectedLspSource?.name === LspSourceOptions.INTERNAL ? null : setFname(e.target.value))}
-          disabled={selectedLspSource?.name === LspSourceOptions.INTERNAL}
+          defaultValue={fname}
+          disabled
           size="small"
           placeholder="Enter first name"
           className="placeholder:text-xs"
@@ -179,10 +223,8 @@ export const PersonalInformation: FunctionComponent = () => {
         </label>
         <Input
           id="mname"
-          defaultValue={selectedLspSource?.name === LspSourceOptions.INTERNAL ? mname : undefined}
-          value={selectedLspSource?.name === LspSourceOptions.INTERNAL ? undefined : mname}
-          onChange={(e) => (selectedLspSource?.name === LspSourceOptions.INTERNAL ? null : setMname(e.target.value))}
-          disabled={selectedLspSource?.name === LspSourceOptions.INTERNAL}
+          defaultValue={mname}
+          disabled
           size="small"
           placeholder="Enter middle name"
           className="placeholder:text-xs"
@@ -195,15 +237,13 @@ export const PersonalInformation: FunctionComponent = () => {
         </label>
         <Input
           id="lname"
-          defaultValue={selectedLspSource?.name === LspSourceOptions.INTERNAL ? lname : undefined}
-          value={selectedLspSource?.name === LspSourceOptions.INTERNAL ? undefined : lname}
-          onChange={(e) => (selectedLspSource?.name === LspSourceOptions.INTERNAL ? null : setLname(e.target.value))}
-          disabled={selectedLspSource?.name === LspSourceOptions.INTERNAL}
+          defaultValue={lname}
+          disabled
           size="small"
           placeholder="Enter last name"
           className="placeholder:text-xs"
         />
-      </div>
+      </div> */}
 
       <div>
         <label htmlFor="exp" className="text-xs font-medium text-gray-600">

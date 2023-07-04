@@ -5,41 +5,38 @@ import * as Tooltip from "@radix-ui/react-tooltip";
 import { useLspDetailsStore } from "@lms/utilities/stores/lsp-details-store";
 import { UndrawContractSvg } from "../UndrawContractSvg";
 
-type CertificationMutation = {
+type AwardsMutation = {
   isShowing: boolean;
   type: null | "add" | "edit";
 };
 
-export const Certifications: FunctionComponent = () => {
-  const certifications = useLspDetailsStore((state) => state.certifications);
-  const setCertifications = useLspDetailsStore((state) => state.setCertifications);
+export const AwardsAndRecognitionsExternal: FunctionComponent = () => {
+  const awards = useLspDetailsStore((state) => state.awards);
+  const setAwards = useLspDetailsStore((state) => state.setAwards);
 
-  const [certificationVal, setCertificationVal] = useState("");
-  const [certificationIndexToEdit, setCertificationIndexToEdit] = useState(-1);
-  const [certificationMutation, setCertificationMutation] = useState<CertificationMutation>({
-    isShowing: false,
-    type: null,
-  });
+  const [awardsVal, setAwardsVal] = useState("");
+  const [awardsIndexToEdit, setAwardsIndexToEdit] = useState(-1);
+  const [awardsMutation, setAwardsMutation] = useState<AwardsMutation>({ isShowing: false, type: null });
 
-  const certificationInputRef = useRef(null) as unknown as MutableRefObject<HTMLInputElement>;
+  const awardsInputRef = useRef(null) as unknown as MutableRefObject<HTMLInputElement>;
 
   useEffect(() => {
-    if (certificationMutation.isShowing) certificationInputRef?.current?.focus();
-  }, [certificationMutation.isShowing]);
+    if (awardsMutation.isShowing) awardsInputRef?.current?.focus();
+  }, [awardsMutation.isShowing]);
 
   return (
     <>
       <div className="w-full flex items-center justify-between">
-        <p className="text-xs font-medium text-gray-600">Certifications</p>
+        <p className="text-xs font-medium text-gray-600">Awards & recognitions</p>
         <Tooltip.Provider delayDuration={500}>
           <Tooltip.Root>
             <Tooltip.Trigger asChild>
               <button
                 className="flex items-center justify-center h-5 w-5 hover:bg-gray-100 transition-colors rounded"
                 onClick={() => {
-                  setCertificationMutation({ isShowing: true, type: "add" });
-                  setCertificationVal("");
-                  certificationInputRef?.current?.focus();
+                  setAwardsMutation({ isShowing: true, type: "add" });
+                  setAwardsVal("");
+                  awardsInputRef?.current?.focus();
                 }}
               >
                 <svg
@@ -56,13 +53,13 @@ export const Certifications: FunctionComponent = () => {
               sideOffset={2}
               className="bg-zinc-800 z-50 text-xs text-white px-2 py-1 rounded font-medium"
             >
-              Add certification
+              Add award & recognition
             </Tooltip.Content>
           </Tooltip.Root>
         </Tooltip.Provider>
       </div>
 
-      {certifications.length === 0 ? (
+      {awards.length === 0 ? (
         <div className="border-2 bg-gray-50/50 rounded-lg border-dashed w-full flex items-center justify-center">
           <div className="py-4">
             <div className="flex justify-center">
@@ -72,20 +69,20 @@ export const Certifications: FunctionComponent = () => {
               role="button"
               className="text-gray-500"
               onClick={() => {
-                setCertificationMutation({ isShowing: true, type: "add" });
-                certificationInputRef?.current?.focus();
+                setAwardsMutation({ isShowing: true, type: "add" });
+                awardsInputRef?.current?.focus();
               }}
             >
-              Add certification details
+              Add awards & recognitions
             </h3>
           </div>
         </div>
       ) : (
         <ul className="space-y-2">
-          {certifications.map((item, index) => (
+          {awards.map((item, index) => (
             <div
               key={index}
-              className="text-sm border-l-4 border-l-cyan-400 border-y border-r rounded-r grid grid-cols-12"
+              className="text-sm border-l-4 border-l-blue-400 border-y border-r rounded-r grid grid-cols-12"
             >
               <h3 className="col-span-10 pl-4 py-2">{item.name}</h3>
               <div className="col-span-2 py-2 text-center flex items-start justify-center gap-1">
@@ -94,10 +91,10 @@ export const Certifications: FunctionComponent = () => {
                     <Tooltip.Trigger asChild>
                       <button
                         onClick={() => {
-                          setCertificationMutation({ isShowing: true, type: "edit" });
-                          setCertificationVal(item.name);
-                          setCertificationIndexToEdit(index);
-                          certificationInputRef?.current?.focus();
+                          setAwardsMutation({ isShowing: true, type: "edit" });
+                          setAwardsVal(item.name);
+                          setAwardsIndexToEdit(index);
+                          awardsInputRef?.current?.focus();
                         }}
                       >
                         <svg
@@ -132,11 +129,11 @@ export const Certifications: FunctionComponent = () => {
                     <Tooltip.Trigger asChild>
                       <button
                         onClick={() => {
-                          const newCertifications = [...certifications];
-                          newCertifications.splice(index, 1);
-                          setCertifications(newCertifications);
-                          setCertificationMutation({ isShowing: false, type: null });
-                          setCertificationVal("");
+                          const newAwards = [...awards];
+                          newAwards.splice(index, 1);
+                          setAwards(newAwards);
+                          setAwardsMutation({ isShowing: false, type: null });
+                          setAwardsVal("");
                         }}
                       >
                         <svg
@@ -169,50 +166,50 @@ export const Certifications: FunctionComponent = () => {
         </ul>
       )}
 
-      {certificationMutation.isShowing && (
+      {awardsMutation.isShowing && (
         <div>
           <input
-            value={certificationVal}
-            onChange={(e) => setCertificationVal(e.target.value)}
-            ref={certificationInputRef}
+            value={awardsVal}
+            onChange={(e) => setAwardsVal(e.target.value)}
+            ref={awardsInputRef}
             type="text"
-            placeholder="Please specify certification name"
+            placeholder="Please specify the name of award or recognition"
             className="py-2 px-3 placeholder:text-gray-300 block w-full border-gray-200 rounded text-xs focus:border-indigo-500 focus:ring-indigo-500"
           />
 
           <div className="flex items-center gap-1 mt-2">
             <button
-              disabled={certificationVal === ""}
+              disabled={awardsVal === ""}
               onClick={() => {
                 /**
                  * Check if type id edit
                  */
-                if (certificationMutation.type === "edit") {
+                if (awardsMutation.type === "edit") {
                   // get a copy of the current expertise state
-                  const newCertifications = [...certifications];
+                  const newAwards = [...awards];
 
                   // update the value of the expertise based on what is typed by the user
-                  newCertifications[certificationIndexToEdit].name = certificationVal;
+                  newAwards[awardsIndexToEdit].name = awardsVal;
 
                   // set the new state for expertise
-                  setCertifications(newCertifications);
+                  setAwards(newAwards);
 
                   // reset the value of editExpertise value for index to update
-                  setCertificationIndexToEdit(-1);
+                  setAwardsIndexToEdit(-1);
 
                   /**
                    * If type is add
                    */
-                } else if (certificationMutation.type === "add") {
+                } else if (awardsMutation.type === "add") {
                   // add the new expertise in the array
-                  setCertifications([...certifications, { name: certificationVal }]);
+                  setAwards([...awards, { name: awardsVal }]);
                 }
 
                 // reset the value of expertiseVal state
-                setCertificationVal("");
+                setAwardsVal("");
 
                 // reset the value of addExpertise state
-                setCertificationMutation({ isShowing: false, type: null });
+                setAwardsMutation({ isShowing: false, type: null });
               }}
               className="text-xs py-1 px-2 inline-flex justify-center items-center gap-2 rounded border border-transparent font-semibold bg-indigo-500 text-white hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all"
             >
@@ -220,8 +217,8 @@ export const Certifications: FunctionComponent = () => {
             </button>
             <button
               onClick={() => {
-                setCertificationMutation({ isShowing: false, type: null });
-                setCertificationVal("");
+                setAwardsMutation({ isShowing: false, type: null });
+                setAwardsVal("");
               }}
               className="text-xs py-1 px-2 inline-flex justify-center items-center gap-2 rounded-md border font-medium bg-white text-gray-700 shadow-sm align-middle hover:bg-gray-50 outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-indigo-600 transition-all"
             >

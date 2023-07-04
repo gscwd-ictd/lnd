@@ -9,7 +9,7 @@ type LspExpertise = {
   subjectMatter: string;
 };
 
-type LspEducation = {
+export type LspEducation = {
   degree: string;
   institution: string;
 };
@@ -31,16 +31,30 @@ type LspAffiliation = {
   institution: string;
 };
 
-type LspAward = {
+export type LspAward = {
   name: string;
 };
 
-type LspCertification = {
+export type LspCertification = {
   name: string;
+};
+
+type EmployeeEducation = {
+  schoolName: string;
+  degree: string;
+};
+
+type EmployeeEligibility = {
+  name: string;
+};
+
+type EmployeeAward = {
+  recognition: string;
 };
 
 type EmployeePds = {
   personalInfo: {
+    _id: string;
     companyId: string;
     firstName: string;
     middleName: string;
@@ -57,6 +71,10 @@ type EmployeePds = {
     province: string;
     zipCode: string;
   };
+  college: EmployeeEducation[];
+  graduate: EmployeeEducation[];
+  eligibility: EmployeeEligibility[];
+  recognitions: EmployeeAward[];
 };
 
 export type EmployeeSearchStore = {
@@ -137,6 +155,7 @@ export type LspDetailsStore = {
   setAffiliations: (affiliations: LspAffiliation[]) => void;
   setAwards: (awards: LspAward[]) => void;
   setCertifications: (certifications: LspCertification[]) => void;
+  reset: () => void;
 };
 
 export const useLspDetailsStore = create<LspDetailsStore>((set) => ({
@@ -178,6 +197,28 @@ export const useLspDetailsStore = create<LspDetailsStore>((set) => ({
   setAffiliations: (affiliations) => set({ affiliations }),
   setAwards: (awards) => set({ awards }),
   setCertifications: (certifications) => set({ certifications }),
+  reset: () =>
+    set({
+      employeeId: null,
+      photoUrl: "",
+      firstName: "",
+      middleName: "",
+      lastName: "",
+      introduction: "",
+      contactNumber: "",
+      email: "",
+      postalAddress: "",
+      lspSource: "",
+      experience: null,
+      expertise: [],
+      education: [],
+      trainings: [],
+      projects: [],
+      coaching: [],
+      affiliations: [],
+      awards: [],
+      certifications: [],
+    }),
 }));
 
 export const useLspSourcesStore = create<LspSourcesStore>((set) => ({
