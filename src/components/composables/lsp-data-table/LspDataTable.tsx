@@ -134,7 +134,7 @@ export const LspDataTable: FunctionComponent = () => {
         <SlideOver.Body>{data && JSON.stringify(data)}</SlideOver.Body>
       </SlideOver>
       <DataTable<LearningServiceProvider>
-        datasource={`${url}/lsp-individual-details?page=1&limit=40`}
+        datasource={`${url}/lsp-individual-detailsssss?page=1&limit=40`}
         queryKey={["lsp"]}
         columns={columns}
         title="Learning Service Providers"

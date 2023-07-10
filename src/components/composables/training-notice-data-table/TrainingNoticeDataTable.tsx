@@ -39,7 +39,7 @@ export const TrainingNoticeDataTable: FunctionComponent = () => {
   return (
     <>
       <DataTable<TrainingNotice>
-        datasource={`${url}/trainings`}
+        datasource={`${url}/training-individual-details`}
         queryKey={["training-notice"]}
         columns={columns}
         title="Notice of Training"
